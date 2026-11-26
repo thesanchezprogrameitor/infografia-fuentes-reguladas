@@ -551,3 +551,75 @@ input[type="range"]::-moz-range-thumb { width: 14px; height: 14px; border-radius
   html:not(.apps-static) .apps-pin { flex: 1; display: flex; align-items: center; min-height: 0; }
   html:not(.apps-static) .app-intro, html:not(.apps-static) .app-card { min-height: clamp(300px, 46svh, 500px); }
 }
+
+/* ==========================================================================
+   Sistema tipográfico: seis tamaños y nada más
+   display (título de portada) · h2 (secciones) · h3 (bloques) · lead (bajadas y nombres de ítem) · body · small
+   Reglas de anthropics/skills frontend-design y vercel-labs/web-interface-guidelines:
+   sin etiquetas en mayúscula espaciada, sin palabra resaltada en el título, sin sombras de "tarjeta pegada",
+   un solo momento de animación orquestado (carga de la portada y llegada a la teoría).
+   ========================================================================== */
+:root {
+  --t-h2: clamp(2.4rem, 1.5rem + 4.4vw, 6.4rem);
+  --t-h3: clamp(1.4rem, 1.15rem + 1.1vw, 2.3rem);
+  --t-lead: clamp(1.1rem, 1rem + .42vw, 1.42rem);
+  --t-body: var(--step-0);
+  --t-small: var(--step--1);
+}
+
+/* Portada */
+.hero h1 .accent { color: inherit; }
+.hero-meta { text-transform: none; letter-spacing: 0; font-size: var(--t-small); font-weight: 400; }
+.hero .lede { font-size: var(--t-lead); }
+.hero-credit { padding-top: var(--space-xs); }
+.hero-credit p { font-size: var(--t-lead); line-height: 1.35; color: var(--ink-2); }
+.hero-credit strong { font-weight: 650; color: var(--ink); }
+.hero-credit .activity { font-size: var(--t-lead); color: var(--muted); }
+
+/* Encabezados de sección: título y descripción debajo, alineados a la izquierda */
+.section-head, .scene-head { display: block; }
+.section-head h2, .scene-head h2 { font-size: min(var(--t-h2), 6.4vw); line-height: .92; letter-spacing: -0.02em; }
+.section-head p, .scene-head p { font-size: var(--t-lead); line-height: 1.4; color: var(--ink-2); max-width: 62ch; margin-top: var(--space-xs); text-align: left; justify-self: auto; }
+@media (min-width: 960px) { .scene-head h2 { white-space: nowrap; } }
+
+/* Teoría: etapas más grandes, sin la etiqueta repetida encima del texto */
+.blocks .chip { font-size: var(--t-body); padding-top: 12px; gap: 10px; }
+.blocks .chip b { width: 1.9em; height: 1.9em; font-size: .78em; }
+.step-tag { display: none; }
+.step h3 { font-size: min(var(--t-h3), 4.6svh); }
+.screen { box-shadow: none; }
+
+/* Importancia */
+.col-label { font-family: var(--font); text-transform: none; letter-spacing: 0; font-size: var(--t-body); font-weight: 600; color: var(--ink); }
+.effect h3, .vs-name, .app-card h4 { font-size: var(--t-lead); line-height: 1.05; }
+.effect p, .vs-col p, .pros li { font-size: var(--t-body); }
+.blk-title { font-size: var(--t-h3); }
+.imp-b { align-items: stretch; }
+.versus, .variable-block { display: flex; flex-direction: column; }
+.versus .vs-grid { flex: 1; align-content: start; }
+.variable-viz { flex: 1; display: grid; place-items: center; padding-block: var(--space-m); }
+.variable-viz svg { filter: none; }
+.variable-block .blk-sub { margin-top: 0; }
+
+/* Aplicaciones */
+.app-intro h3 { font-size: var(--t-h3); }
+.app-intro p, .app-card p { font-size: var(--t-body); }
+.app-intro .pill { text-transform: none; letter-spacing: 0; font-size: var(--t-small); }
+
+/* Referencias: al pie, en letra pequeña */
+.refs { min-height: 0; display: block; padding-block: var(--space-xl) var(--space-m); }
+.refs h2 { font-size: var(--t-body); letter-spacing: .02em; color: #b0b4ba; margin-bottom: var(--space-xs); }
+.refs ol { gap: var(--space-2xs); }
+.refs li { font-size: var(--t-small); }
+.credit { margin-top: var(--space-m); padding-top: var(--space-s); }
+.credit p:first-child { font-family: var(--font); text-transform: none; letter-spacing: 0; font-weight: 600; font-size: var(--t-small); }
+
+@media (min-width: 960px) and (max-height: 760px) {
+  .scene-head p { display: none; }
+  .scene-head h2 { font-size: min(var(--t-h2), 6.4vw, 7.6svh); }
+}
+@media (max-width: 959px) {
+  .section-head h2, .scene-head h2 { font-size: min(var(--t-h2), 8.4vw); }
+  .blocks .chip { font-size: 0.75rem; }
+  .hero-credit { flex-direction: column; }
+}

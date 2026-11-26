@@ -845,8 +845,8 @@
   function bench() {
     const knob = $('#bench-knob'), vEl = $('#bench-v'), rEl = $('#bench-r');
     const ticks = $('#bench-ticks');
-    const items = $$('#vscale li');
-    if (!knob || !items.length) return;
+    const VALS = [3.3, 5, 9, 12, 15];
+    if (!knob) return;
     for (let i = 0; i <= 10; i++) {
       const a = (-135 + 27 * i) * Math.PI / 180;
       el('line', { x1: Math.sin(a) * 39, y1: -Math.cos(a) * 39, x2: Math.sin(a) * (i % 5 === 0 ? 45 : 43), y2: -Math.cos(a) * (i % 5 === 0 ? 45 : 43) }, ticks);
@@ -860,8 +860,7 @@
     let idx = 1, timer = null;
     function select(i) {
       idx = i;
-      items.forEach((li, k) => li.classList.toggle('is-on', k === i));
-      const v = +items[i].dataset.v;
+      const v = VALS[i];
       if (HAS_GSAP && !REDUCE) G.to(st, { v, duration: 1.1, ease: 'power3.inOut', onUpdate: paint, overwrite: true });
       else { st.v = v; paint(); }
     }
@@ -869,7 +868,7 @@
     if (REDUCE || !('IntersectionObserver' in window)) return;
     new IntersectionObserver((e) => {
       clearInterval(timer);
-      if (e[0].isIntersecting) timer = setInterval(() => select((idx + 1) % items.length), 2400);
+      if (e[0].isIntersecting) timer = setInterval(() => select((idx + 1) % VALS.length), 2400);
     }, { threshold: 0.3 }).observe(knob.closest('.variable-block'));
   }
 
@@ -937,7 +936,6 @@
     const show = () => heads.forEach((h) => { h.style.visibility = 'visible'; });
     if (!HAS_GSAP || REDUCE || !window.SplitText) { show(); return; }
     G.registerPlugin(window.SplitText);
-    $$('.step h3, .effect h3, .blk-title').forEach((h) => { h.dataset.split = 'words'; h.dataset.splitLate = '1'; });
     const all = $$('[data-split]');
     const go = () => all.forEach((h) => {
       const chars = h.dataset.split === 'chars';
