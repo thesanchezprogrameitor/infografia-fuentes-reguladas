@@ -22,7 +22,7 @@
 <body>
   <a class="skip" href="#teoria">Saltar al contenido</a>
 
-  <header class="topbar" id="topbar">
+  <header class="topbar at-hero" id="topbar">
     <div class="wrap">
       <a class="brand" href="#inicio" aria-label="Inicio">
         <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#1c2024"/><path d="M5 18c2-7 4-7 6 0s4 7 6 0" fill="none" stroke="#70b8ff" stroke-width="2.2" stroke-linecap="round"/><path d="M17 13h10" stroke="#71d083" stroke-width="2.6" stroke-linecap="round"/></svg>
@@ -41,29 +41,25 @@
     <!-- ================= PORTADA ================= -->
     <section class="hero" id="inicio">
       <div class="wrap hero-sheet">
-        <div class="hero-top">
+        <div class="hero-meta" data-intro>
+          <span>UNAD · ECBTI · Ingeniería Electrónica</span>
+          <span>Electrónica Análoga · 243006 · Fase 6</span>
+        </div>
+
+        <div class="hero-main">
           <div class="hero-title">
-            <p class="kicker" data-intro><i aria-hidden="true"><span style="background:var(--ac)"></span><span style="background:var(--rect)"></span><span style="background:var(--filt)"></span><span style="background:var(--reg)"></span></i>Infografía interactiva</p>
             <h1 data-split="chars">Fuentes de alimentación <span class="accent">reguladas</span></h1>
             <p class="lede" data-intro>Cómo el voltaje alterno del tomacorriente se vuelve, etapa por etapa, un voltaje continuo que no se mueve.</p>
           </div>
-          <dl class="rotulo" data-intro>
-            <div class="r-author"><dt>Trabajo realizado por el estudiante</dt><dd>Leonardo Sánchez</dd></div>
-            <div><dt>Curso</dt><dd>Electrónica Análoga · 243006</dd></div>
-            <div><dt>Programa</dt><dd>Ingeniería Electrónica · ECBTI · Universidad Nacional Abierta y a Distancia, UNAD</dd></div>
-            <div><dt>Actividad</dt><dd>Fase 6 · Problema de diseño fuente de alimentación regulada y variable</dd></div>
-          </dl>
+          <div class="credit-hero" data-intro>
+            <p class="who">Trabajo realizado por el estudiante</p>
+            <p class="author">Leonardo Sánchez</p>
+            <p class="activity">Problema de diseño fuente de alimentación regulada y variable</p>
+          </div>
         </div>
 
-        <figure class="hero-wave" aria-label="La señal de la fuente, de la red a la salida regulada">
-          <div class="hw-box" id="hero-box"><svg id="hero-svg" aria-hidden="true"></svg></div>
-          <ol class="hero-stages">
-            <li style="--c:var(--ac)"><b>Red</b>120&nbsp;V · 60&nbsp;Hz</li>
-            <li style="--c:var(--ac)"><b>Transformador</b>12&nbsp;V rms</li>
-            <li style="--c:var(--rect)"><b>Rectificador</b>pulsos</li>
-            <li style="--c:var(--filt)"><b>Filtro</b>casi continua</li>
-            <li style="--c:var(--reg)"><b>Regulador</b>continua y fija</li>
-          </ol>
+        <figure class="hero-diagram" aria-label="Diagrama de bloques de la fuente: red de 120 V a 60 Hz, transformador a 12 V rms, rectificador, filtro con capacitor, regulador y carga, con la forma de onda en cada punto.">
+          <div class="hd-box" id="hero-box"><svg id="hero-svg" aria-hidden="true"></svg></div>
         </figure>
       </div>
     </section>
@@ -74,7 +70,7 @@
         <div class="scene wrap" id="scene">
           <header class="scene-head">
             <div class="sec-title"><span class="num" aria-hidden="true">01</span><h2 id="t-title" data-split="words">Teoría de funcionamiento</h2></div>
-            <p data-reveal><strong>Cinco bloques en cascada.</strong> Cada uno recibe la señal del anterior y la deja más cerca de lo que necesita la carga.</p>
+            <p><strong>Cinco bloques en cascada.</strong> Cada uno recibe la señal del anterior y la deja más cerca de lo que necesita la carga.</p>
           </header>
 
           <div class="stage" id="stage" aria-hidden="true">
@@ -189,8 +185,8 @@
           <p data-reveal><strong>Un voltaje que no se mueve.</strong> Los circuitos electrónicos se diseñan para un voltaje de alimentación definido, y si ese voltaje cambia, cambia su comportamiento.</p>
         </header>
 
-        <div class="bento">
-          <figure class="panel screen b-compare" data-reveal style="margin:0">
+        <div class="imp-a">
+          <figure class="panel screen b-compare" data-reveal>
             <div class="compare-head">
               <span class="ttl">Sin regular frente a regulada</span>
               <span class="legend" style="--c:var(--tr-rect)"><i></i>Salida del filtro</span>
@@ -202,57 +198,66 @@
             <figcaption class="compare-foot">Sin regular, el voltaje sube y baja con la red, cae cuando la carga pide más corriente y arrastra el rizo del filtro, <strong>la regulación elimina esas variaciones</strong>. El tiempo está comprimido para que se vea el rizo.</figcaption>
           </figure>
 
-          <article class="panel card b-effect" data-reveal>
-            <div class="viz">
-              <svg viewBox="0 0 80 64" aria-hidden="true">
-                <path d="M8 24h10l12-10v36L18 40H8z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
-                <path class="hum-arc" d="M36 24a10 10 0 0 1 0 16"/>
-                <path class="hum-arc a2" d="M42 18a18 18 0 0 1 0 28"/>
-                <path class="hum-arc a3" d="M48 12a26 26 0 0 1 0 40"/>
-              </svg>
-            </div>
-            <h3>En un amplificador</h3>
-            <p>El rizo se cuela en la señal y se oye como un zumbido.</p>
-          </article>
-          <article class="panel card b-effect" data-reveal>
-            <div class="viz">
-              <svg viewBox="0 0 96 64" class="bits" aria-hidden="true">
-                <rect x="10" y="12" width="76" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="2.4"/>
-                <path d="M22 12V5M36 12V5M50 12V5M64 12V5M78 12V5M22 59v-7M36 59v-7M50 59v-7M64 59v-7M78 59v-7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-                <text y="37" text-anchor="middle"><tspan x="22">1</tspan><tspan x="36">0</tspan><tspan x="50" class="bit-bad">1</tspan><tspan x="64">1</tspan><tspan x="78">0</tspan></text>
-              </svg>
-            </div>
-            <h3>En circuitos digitales</h3>
-            <p>Una caída de voltaje puede cambiar un bit o reiniciar el sistema.</p>
-          </article>
-          <article class="panel card b-effect" data-reveal>
-            <div class="viz">
-              <svg viewBox="0 0 80 64" aria-hidden="true">
-                <path d="M12 52a28 28 0 0 1 56 0" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-                <path d="M16 38l4 2M24 29l3 3M40 24v4M56 29l-3 3M64 38l-4 2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-                <path class="needle" d="M40 52V27" stroke="#1c2024" stroke-width="2.6" stroke-linecap="round"/>
-                <circle cx="40" cy="52" r="3.6" fill="#1c2024"/>
-              </svg>
-            </div>
-            <h3>En instrumentos de medición</h3>
-            <p>Si la referencia se mueve, las lecturas salen erróneas.</p>
-          </article>
+          <div class="effects">
+            <p class="col-label">Si el voltaje de alimentación cambia</p>
+            <article class="effect" data-reveal>
+              <div class="viz">
+                <svg viewBox="0 0 80 64" aria-hidden="true">
+                  <path d="M8 24h10l12-10v36L18 40H8z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
+                  <path class="hum-arc" d="M36 24a10 10 0 0 1 0 16"/>
+                  <path class="hum-arc a2" d="M42 18a18 18 0 0 1 0 28"/>
+                  <path class="hum-arc a3" d="M48 12a26 26 0 0 1 0 40"/>
+                </svg>
+              </div>
+              <div><h3>En un amplificador</h3><p>El rizo se cuela en la señal y se oye como un zumbido.</p></div>
+            </article>
+            <article class="effect" data-reveal>
+              <div class="viz">
+                <svg viewBox="0 0 96 64" class="bits" aria-hidden="true">
+                  <rect x="10" y="12" width="76" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="2.4"/>
+                  <path d="M22 12V5M36 12V5M50 12V5M64 12V5M78 12V5M22 59v-7M36 59v-7M50 59v-7M64 59v-7M78 59v-7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+                  <text y="37" text-anchor="middle"><tspan x="22">1</tspan><tspan x="36">0</tspan><tspan x="50" class="bit-bad">1</tspan><tspan x="64">1</tspan><tspan x="78">0</tspan></text>
+                </svg>
+              </div>
+              <div><h3>En circuitos digitales</h3><p>Una caída de voltaje puede cambiar un bit o reiniciar el sistema.</p></div>
+            </article>
+            <article class="effect" data-reveal>
+              <div class="viz">
+                <svg viewBox="0 0 80 64" aria-hidden="true">
+                  <path d="M12 52a28 28 0 0 1 56 0" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+                  <path d="M16 38l4 2M24 29l3 3M40 24v4M56 29l-3 3M64 38l-4 2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+                  <path class="needle" d="M40 52V27" stroke="#1c2024" stroke-width="2.6" stroke-linecap="round"/>
+                  <circle cx="40" cy="52" r="3.6" fill="#1c2024"/>
+                </svg>
+              </div>
+              <div><h3>En instrumentos de medición</h3><p>Si la referencia se mueve, las lecturas salen erróneas.</p></div>
+            </article>
+          </div>
+        </div>
 
-          <article class="panel card vs-card b-batt" style="--cbg:var(--rect-bg)" data-reveal>
-            <span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="9" width="21" height="14" rx="2.5" fill="none" stroke="#cc4e00" stroke-width="2"/><path d="M25 13.5h3v5h-3" fill="none" stroke="#cc4e00" stroke-width="2" stroke-linejoin="round"/><rect x="7" y="12" width="6" height="8" rx="1" fill="#f76b15"/></svg></span>
-            <h3>La batería</h3>
-            <p>Su gran ventaja es la portabilidad, pero hay situaciones en que resulta muy costosa.</p>
-            <div class="tag-row"><span class="tag good">portátil</span><span class="tag bad">costosa en muchos usos</span></div>
-          </article>
-          <article class="panel card vs-card b-red" style="--cbg:var(--reg-bg)" data-reveal>
-            <span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M12 4v6M20 4v6" stroke="#2a7e3b" stroke-width="2" stroke-linecap="round"/><path d="M9 10h14v5a7 7 0 0 1-14 0z" fill="none" stroke="#2a7e3b" stroke-width="2" stroke-linejoin="round"/><path d="M16 22v6" stroke="#46a758" stroke-width="2.4" stroke-linecap="round"/></svg></span>
-            <h3>La fuente de red</h3>
-            <p>Toma la energía del tomacorriente y da un voltaje continuo más económico, estable y potente.</p>
-            <div class="tag-row"><span class="tag good">económica</span><span class="tag good">estable</span><span class="tag good">potente</span></div>
-          </article>
+        <div class="imp-b">
+          <div class="versus" data-reveal>
+            <p class="col-label">Batería frente a fuente de red</p>
+            <div class="vs-grid">
+              <div class="vs-col" style="--c:var(--rect);--ct:var(--rect-t)">
+                <svg class="vs-ico" viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="9" width="21" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M25 13.5h3v5h-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="7" y="12" width="6" height="8" rx="1" fill="currentColor"/></svg>
+                <h3>La batería</h3>
+                <p>Su gran ventaja es la portabilidad, pero hay situaciones en que resulta muy costosa.</p>
+                <ul class="pros"><li class="good">Portátil</li><li class="bad">Costosa en muchos usos</li></ul>
+              </div>
+              <span class="vs-mark" aria-hidden="true">vs</span>
+              <div class="vs-col" style="--c:var(--reg);--ct:var(--reg-t)">
+                <svg class="vs-ico" viewBox="0 0 32 32" aria-hidden="true"><path d="M12 4v6M20 4v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9 10h14v5a7 7 0 0 1-14 0z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M16 22v6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+                <h3>La fuente de red</h3>
+                <p>Toma la energía del tomacorriente y da un voltaje continuo más económico, estable y potente.</p>
+                <ul class="pros"><li class="good">Económica</li><li class="good">Estable</li><li class="good">Potente</li></ul>
+              </div>
+            </div>
+          </div>
 
-          <article class="panel b-var" data-reveal>
+          <div class="variable-block" data-reveal>
             <div class="variable-text">
+              <p class="col-label">Fuente variable</p>
               <h3>Y si además es variable</h3>
               <p>Con R2 como potenciómetro el voltaje se puede ajustar, de modo que un solo equipo alimenta circuitos que trabajan con voltajes distintos, en este diseño ajustable hasta 15&nbsp;V.</p>
               <div class="vchips" id="vchips" role="group" aria-label="Elegir un voltaje de salida">
@@ -262,6 +267,7 @@
                 <button type="button" data-v="12">12&nbsp;V</button>
                 <button type="button" data-v="15">15&nbsp;V</button>
               </div>
+              <p class="bench-caption" id="bench-caption" aria-live="polite"><strong>5&nbsp;V</strong></p>
             </div>
             <div class="variable-viz">
               <svg class="bench" viewBox="0 0 440 210" aria-hidden="true">
@@ -287,9 +293,8 @@
                 <text class="lab-t" x="390" y="104" text-anchor="middle" font-size="12">+</text>
                 <text class="lab-t" x="390" y="156" text-anchor="middle" font-size="12">−</text>
               </svg>
-              <p class="bench-caption" id="bench-caption" aria-live="polite"><strong>5&nbsp;V</strong></p>
             </div>
-          </article>
+          </div>
         </div>
       </div>
     </section>

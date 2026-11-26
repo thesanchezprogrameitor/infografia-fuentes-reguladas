@@ -107,72 +107,90 @@
   }
 
   // =====================================================================
-  //  HERO · una sola línea que resume la fuente, a la medida de su caja
+  //  HERO · diagrama de bloques con la forma de onda en cada punto
   // =====================================================================
   function hero() {
     const svg = $('#hero-svg'), box = $('#hero-box');
     if (!svg || !box) return;
-    let pts = [], W = 0, seg = 0, line = null, glow = null, dot = null, halo = null, drawn = false;
+    const BOX = [['Transformador', 'Transf.', PAP.ac], ['Rectificador', 'Rect.', PAP.rect], ['Filtro', 'Filtro', PAP.filt], ['Regulador', 'Regul.', PAP.reg], ['Carga', 'Carga', PAP.load]];
+    const WAVE = [
+      ['Red · 120 V · 60 Hz', PAP.ac], ['12 V rms', PAP.ac], ['pulsos · 120 Hz', PAP.rect], ['rizo ≈ 0.33 Vpp', PAP.filt], ['10 V constantes', PAP.reg]
+    ];
+    // forma de cada punto, u en ciclos de la red; devuelve un valor entre −1 y 1
+    const saw = (u) => { const p = ((u * 2) % 1 + 1) % 1; return p < 0.18 ? p / 0.18 : 1 - (p - 0.18) / 0.82; };
+    const SHAPE = [
+      (u) => Math.sin(2 * Math.PI * u),
+      (u) => 0.42 * Math.sin(2 * Math.PI * u),
+      (u) => 0.42 * Math.abs(Math.sin(2 * Math.PI * u)) - 0.2,
+      (u) => 0.36 + 0.06 * saw(u) - 0.2,
+      () => 0.3 - 0.2
+    ];
+    let traces = [], groups = [], phase = 0;
 
     function build() {
-      W = Math.max(280, Math.round(box.clientWidth));
-      const H = Math.max(90, Math.round(box.clientHeight));
-      seg = W / 5;
-      const Y0 = H * 0.54, A1 = H * 0.4, A2 = H * 0.2;
+      const W = Math.max(280, Math.round(box.clientWidth));
+      const H = Math.max(120, Math.round(box.clientHeight));
       svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
       svg.textContent = '';
-      const defs = el('defs', {}, svg);
-      const grad = el('linearGradient', { id: 'hg', gradientUnits: 'userSpaceOnUse', x1: 0, y1: 0, x2: W, y2: 0 }, defs);
-      [[0, PAP.ac], [0.395, PAP.ac], [0.405, PAP.rect], [0.595, PAP.rect], [0.605, PAP.filt], [0.795, PAP.filt], [0.805, PAP.reg], [1, PAP.reg]]
-        .forEach(([o, c]) => el('stop', { offset: o, 'stop-color': c }, grad));
-      const blur = el('filter', { id: 'hglow', x: '-10%', y: '-50%', width: '120%', height: '200%' }, defs);
-      el('feGaussianBlur', { stdDeviation: 5 }, blur);
-
-      el('line', { class: 'hw-base', x1: 0, x2: W, y1: Y0, y2: Y0 }, svg);
-      for (let i = 1; i < 5; i++) el('line', { class: 'hw-div', x1: i * seg, x2: i * seg, y1: 0, y2: H }, svg);
-
-      pts = [];
-      let h = 0;
-      const decay = (4.5 / 60) * (A2 / 24) * (240 / seg);
-      const sn = (x) => Math.sin(2 * Math.PI * 2 * x / seg);
-      for (let x = 0; x <= W; x += 2) {
-        let y;
-        if (x < seg) y = Y0 - A1 * sn(x);
-        else if (x < 2 * seg) y = Y0 - A2 * sn(x - seg);
-        else if (x < 3 * seg) y = Y0 - A2 * Math.abs(sn(x - 2 * seg));
-        else if (x < 4 * seg) { h = Math.max(A2 * Math.abs(sn(x - 3 * seg)), h - decay * 2); y = Y0 - h; }
-        else y = Y0 - lerp(h, A2 * 0.66, smooth((x - 4 * seg) / (22 * seg / 240)));
-        pts.push([x, y]);
+      traces = []; groups = [];
+      const vertical = W < 720;
+      const mono = 'font-family:var(--mono)';
+      let slots;
+      if (!vertical) {
+        const bw = W * 0.098, ww = (W - 5 * bw) / 5, cy = H * 0.44, bh = Math.min(H * 0.4, 88), A = H * 0.3;
+        slots = [0, 1, 2, 3, 4].map((i) => ({
+          w: { x: i * (ww + bw) + 10, y: cy, len: ww - 26, A, lx: i * (ww + bw) + 10, ly: H - 4 },
+          b: { x: i * (ww + bw) + ww, y: cy - bh / 2, wd: bw, h: bh, fs: clamp(bw / 11.5, 11, 16) }
+        }));
+      } else {
+        const rh = H / 5, ww = W * 0.5, bw = W * 0.4, bh = Math.min(rh * 0.62, 44);
+        slots = [0, 1, 2, 3, 4].map((i) => ({
+          w: { x: 0, y: i * rh + rh * 0.42, len: ww - 18, A: rh * 0.32, lx: 0, ly: i * rh + rh - 4 },
+          b: { x: W - bw, y: i * rh + rh * 0.42 - bh / 2, wd: bw, h: bh, fs: 12 }
+        }));
       }
-      const d = 'M' + pts.map((p) => p[0] + ' ' + p[1].toFixed(2)).join('L');
-      glow = el('path', { d, fill: 'none', stroke: 'url(#hg)', 'stroke-width': 7, opacity: 0.22, filter: 'url(#hglow)' }, svg);
-      line = el('path', { d, fill: 'none', stroke: 'url(#hg)', 'stroke-width': 3.2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
-      halo = el('circle', { r: 13, fill: PAP.ink, opacity: drawn ? 0.22 : 0 }, svg);
-      dot = el('circle', { r: 5, fill: PAP.ink, opacity: drawn ? 1 : 0 }, svg);
-      [dot, halo].forEach((c) => { c.setAttribute('cx', pts[0][0]); c.setAttribute('cy', pts[0][1].toFixed(1)); });
+      slots.forEach((s, i) => {
+        const g = el('g', { class: 'hd-stage' }, svg);
+        // tramo de cable con la forma de onda
+        el('line', { x1: s.w.x, x2: s.w.x + s.w.len + 16, y1: s.w.y, y2: s.w.y, class: 'hd-wire' }, g);
+        const tr = el('path', { fill: 'none', stroke: WAVE[i][1], 'stroke-width': 2.6, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, g);
+        traces.push({ el: tr, x: s.w.x, y: s.w.y, len: s.w.len, A: s.w.A, f: SHAPE[i] });
+        txt(g, s.w.lx, s.w.ly, WAVE[i][0], 'hd-lab', 'start', { style: mono });
+        // flecha hacia el bloque
+        const ax = s.b.x, ay = s.b.y + s.b.h / 2;
+        el('path', { d: 'M' + (ax - 9) + ' ' + (ay - 5) + 'L' + ax + ' ' + ay + 'L' + (ax - 9) + ' ' + (ay + 5), class: 'hd-arrow' }, g);
+        // bloque
+        el('rect', { x: s.b.x, y: s.b.y, width: s.b.wd, height: s.b.h, rx: 10, class: 'hd-block', stroke: BOX[i][2] }, g);
+        el('rect', { x: s.b.x + 12, y: s.b.y - 1.5, width: s.b.wd - 24, height: 3, rx: 1.5, fill: BOX[i][2] }, g);
+        const name = vertical ? BOX[i][0] : BOX[i][0];
+        txt(g, s.b.x + s.b.wd / 2, s.b.y + s.b.h / 2 + s.b.fs * 0.36, name, 'hd-name', 'middle', { style: 'font-size:' + s.b.fs + 'px' });
+        groups.push(g);
+      });
+      render();
+    }
+    function render() {
+      traces.forEach((t) => {
+        let d = '';
+        const n = Math.max(40, Math.round(t.len / 3));
+        for (let k = 0; k <= n; k++) {
+          const x = t.x + t.len * k / n;
+          const u = 2 * k / n - phase;
+          d += (k ? 'L' : 'M') + x.toFixed(1) + ' ' + (t.y - t.A * t.f(u)).toFixed(1);
+        }
+        setA(t.el, 'd', d);
+      });
     }
     build();
     let rz;
     window.addEventListener('resize', () => { cancelAnimationFrame(rz); rz = requestAnimationFrame(build); });
-
     if (REDUCE || !HAS_GSAP) return;
-    const len = line.getTotalLength();
-    [line, glow].forEach((p) => { p.style.strokeDasharray = len; p.style.strokeDashoffset = len; });
-    G.to([line, glow], {
-      strokeDashoffset: 0, duration: 2.2, ease: 'power2.inOut', delay: 0.25,
-      onComplete: () => [line, glow].forEach((p) => { p.style.strokeDasharray = ''; p.style.strokeDashoffset = ''; })
-    });
-    const colorAt = (x) => x < 2 * seg ? PAP.ac : x < 3 * seg ? PAP.rect : x < 4 * seg ? PAP.filt : PAP.reg;
-    let p = 0, visible = true;
-    G.delayedCall(2.4, () => { drawn = true; G.to(dot, { opacity: 1, duration: 0.4 }); G.to(halo, { opacity: 0.22, duration: 0.4 }); });
+    G.from(groups, { opacity: 0, y: 18, duration: 0.8, ease: 'power3.out', stagger: 0.12, delay: 0.6 });
+    let visible = true;
     if ('IntersectionObserver' in window) new IntersectionObserver((e) => { visible = e[0].isIntersecting; }).observe(svg);
     tickers.add((dt) => {
-      if (!drawn || !visible || !pts.length) return;
-      p = (p + dt / 7) % 1;
-      const [x, y] = pts[Math.floor(p * (pts.length - 1))];
-      setA(dot, 'cx', x); setA(dot, 'cy', y.toFixed(1));
-      setA(halo, 'cx', x); setA(halo, 'cy', y.toFixed(1));
-      setA(halo, 'fill', colorAt(x));
+      if (!visible) return;
+      phase = (phase + dt * 0.45) % 1;
+      render();
     });
   }
 
@@ -853,7 +871,7 @@
     new IntersectionObserver((e) => {
       clearInterval(timer);
       if (e[0].isIntersecting && !user) timer = setInterval(() => select((idx + 1) % btns.length, false), 2600);
-    }, { threshold: 0.4 }).observe(knob.closest('.b-var'));
+    }, { threshold: 0.4 }).observe(knob.closest('.variable-block'));
   }
 
   // =====================================================================
@@ -894,7 +912,7 @@
 
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver((es) => es.forEach((e) => e.target.classList.toggle('in-view', e.isIntersecting)), { threshold: 0.3 });
-      $$('.b-effect').forEach((e) => io.observe(e));
+      $$('.effect').forEach((e) => io.observe(e));
     }
 
     if (!HAS_GSAP || REDUCE) { $$('[data-reveal]').forEach((e) => { e.style.opacity = 1; e.style.transform = 'none'; }); return; }
@@ -920,7 +938,7 @@
     const show = () => heads.forEach((h) => { h.style.visibility = 'visible'; });
     if (!HAS_GSAP || REDUCE || !window.SplitText) { show(); return; }
     G.registerPlugin(window.SplitText);
-    $$('.step h3, .b-effect h3, .vs-card h3, .variable-text h3').forEach((h) => { h.dataset.split = 'words'; h.dataset.splitLate = '1'; });
+    $$('.step h3, .effect h3, .vs-col h3, .variable-text h3').forEach((h) => { h.dataset.split = 'words'; h.dataset.splitLate = '1'; });
     const all = $$('[data-split]');
     const go = () => all.forEach((h) => {
       const chars = h.dataset.split === 'chars';
@@ -943,19 +961,35 @@
     setTimeout(show, 2500);
   }
 
-  // El esquema se dibuja solo la primera vez que aparece (GSAP DrawSVG)
+  // Llegada a la teoría: mientras la sección sube, la portada se retira y la escena se arma con el scroll.
+  // El esquema se dibuja trazo a trazo (DrawSVG) al mismo ritmo.
   function drawFx() {
-    if (!HAS_GSAP || REDUCE || !window.DrawSVGPlugin) return;
-    G.registerPlugin(window.DrawSVGPlugin);
+    if (!HAS_GSAP || REDUCE) return;
+    if (window.DrawSVGPlugin) G.registerPlugin(window.DrawSVGPlugin);
     const paths = $$('#schematic .w');
-    if (!paths.length) return;
-    G.set(paths, { drawSVG: '0%' });
-    ST.create({
-      trigger: '#scrolly', start: 'top 85%', once: true,
-      onEnter: () => G.to(paths, {
-        drawSVG: '100%', duration: 1.1, ease: 'power2.inOut', stagger: 0.012,
-        onComplete: () => G.set(paths, { clearProps: 'strokeDasharray,strokeDashoffset' })
-      })
+    G.matchMedia().add('(min-width: 960px)', () => {
+      G.to('.hero-sheet', {
+        yPercent: -10, opacity: 0.25, ease: 'none',
+        scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
+      });
+      const tl = G.timeline({
+        defaults: { ease: 'power2.out' },
+        scrollTrigger: { trigger: '#teoria', start: 'top 92%', end: 'top top+=' + ($('#topbar').offsetHeight + 2), scrub: 0.7 }
+      });
+      tl.from('#scene .scene-head', { y: 90, opacity: 0, duration: 0.5 }, 0)
+        .from('#blocks li', { y: 40, opacity: 0, stagger: 0.06, duration: 0.35 }, 0.15)
+        .from('.schematic-wrap', { y: 70, opacity: 0, duration: 0.45 }, 0.2)
+        .from('.scope-wrap', { y: 160, opacity: 0, clipPath: 'inset(40% 0% 0% 0% round 20px)', duration: 0.6 }, 0.3)
+        .from('#steps', { x: 80, opacity: 0, duration: 0.5 }, 0.4);
+      if (window.DrawSVGPlugin && paths.length) tl.fromTo(paths, { drawSVG: '0%' }, { drawSVG: '100%', stagger: 0.004, duration: 0.4, ease: 'none' }, 0.25);
+    });
+    G.matchMedia().add('(max-width: 959px)', () => {
+      if (!window.DrawSVGPlugin || !paths.length) return;
+      G.set(paths, { drawSVG: '0%' });
+      ST.create({
+        trigger: '#scrolly', start: 'top 85%', once: true,
+        onEnter: () => G.to(paths, { drawSVG: '100%', duration: 1.1, ease: 'power2.inOut', stagger: 0.012 })
+      });
     });
   }
 
