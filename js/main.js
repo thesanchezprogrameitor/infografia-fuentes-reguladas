@@ -522,7 +522,7 @@
 
         // caída en los diodos y pulsos
         const dro = smooth((S - 1.6) / 0.3) * (1 - smooth((S - 2.35) / 0.3));
-        setA(drop, 'opacity', dro.toFixed(3));
+        setA(drop, 'opacity', L.w < 460 ? 0 : dro.toFixed(3));
         setA(pulseT, 'opacity', dro.toFixed(3));
         if (dro > 0.001) {
           const tx = X(TPK + 1 / F) + 7;
