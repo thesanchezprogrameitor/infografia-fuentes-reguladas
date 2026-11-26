@@ -6,17 +6,17 @@
   <title>Fuentes de alimentación reguladas · Infografía</title>
   <meta name="description" content="Infografía interactiva sobre la teoría de funcionamiento, la importancia y las aplicaciones de las fuentes de alimentación reguladas. Electrónica Análoga, UNAD, Fase 6. Trabajo realizado por Leonardo Sánchez.">
   <meta name="author" content="Leonardo Sánchez">
-  <meta name="theme-color" content="#090d14">
+  <meta name="theme-color" content="#f6f5f1">
   <meta property="og:title" content="Fuentes de alimentación reguladas · Infografía">
   <meta property="og:description" content="De los 120 V del tomacorriente a un voltaje continuo estable, etapa por etapa. Electrónica Análoga, UNAD, Fase 6.">
   <meta property="og:type" content="website">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="fonts/bricolage-grotesque-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="fonts/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/geist-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
   <script>
     document.documentElement.classList.add('js');
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]reducido/.test(location.search)) document.documentElement.classList.add('reduced');
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || /[?&]reducido/.test(location.search)) document.documentElement.classList.add('reduced');
   </script>
 </head>
 <body>
@@ -25,7 +25,7 @@
   <header class="topbar" id="topbar">
     <div class="wrap">
       <a class="brand" href="#inicio" aria-label="Inicio">
-        <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#101826" stroke="#2d3d5a"/><path d="M5 18c2-7 4-7 6 0s4 7 6 0" fill="none" stroke="#7fb0ff" stroke-width="2" stroke-linecap="round"/><path d="M17 13h10" stroke="#74e39a" stroke-width="2.4" stroke-linecap="round"/></svg>
+        <svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#1c2024"/><path d="M5 18c2-7 4-7 6 0s4 7 6 0" fill="none" stroke="#70b8ff" stroke-width="2.2" stroke-linecap="round"/><path d="M17 13h10" stroke="#71d083" stroke-width="2.6" stroke-linecap="round"/></svg>
         <span>Fuentes reguladas</span>
       </a>
       <nav class="topnav" aria-label="Secciones">
@@ -38,70 +38,79 @@
   </header>
 
   <main>
-    <!-- ================= HERO ================= -->
+    <!-- ================= PORTADA ================= -->
     <section class="hero" id="inicio">
       <div class="wrap">
-        <div class="hero-meta">
+        <div class="hero-meta" data-intro>
           <span>UNAD · ECBTI · Ingeniería Electrónica</span>
           <span>Electrónica Análoga · 243006</span>
         </div>
 
         <div class="hero-grid">
           <div>
-            <p class="kicker">Infografía · Fase 6</p>
-            <h1>Fuentes de alimentación <em>reguladas</em></h1>
-            <p class="lede">Cómo los 120&nbsp;V alternos del tomacorriente se vuelven, etapa por etapa, un voltaje continuo que no se mueve.</p>
+            <p class="kicker" data-intro><i aria-hidden="true"><span style="background:var(--ac)"></span><span style="background:var(--rect)"></span><span style="background:var(--filt)"></span><span style="background:var(--reg)"></span></i>Infografía · Fase 6</p>
+            <h1 data-split="chars">Fuentes de alimentación <span class="accent">reguladas</span></h1>
+            <p class="lede" data-intro>Cómo los 120&nbsp;V alternos del tomacorriente se vuelven, etapa por etapa, un voltaje continuo que no se mueve.</p>
           </div>
-          <div class="author-card">
-            <p class="author">Trabajo realizado por el estudiante <strong>Leonardo Sánchez</strong></p>
-            <p class="course"><strong>Electrónica Análoga (243006)</strong> · Universidad Nacional Abierta y a Distancia, UNAD</p>
-            <p class="activity">Fase 6 · Problema de diseño fuente de alimentación regulada y variable</p>
+          <div class="hero-side">
+            <div class="author-card" data-intro>
+              <p class="who">Trabajo realizado por el estudiante</p>
+              <p class="author">Leonardo Sánchez</p>
+              <p class="course">Electrónica Análoga (243006) · Universidad Nacional Abierta y a Distancia, UNAD</p>
+              <p class="activity">Fase 6 · Problema de diseño fuente de alimentación regulada y variable</p>
+            </div>
+            <nav class="hero-index" aria-label="Contenido" data-intro>
+              <a href="#teoria"><span class="n">01</span><span class="t">Teoría de funcionamiento</span></a>
+              <a href="#importancia"><span class="n">02</span><span class="t">Importancia</span></a>
+              <a href="#aplicaciones"><span class="n">03</span><span class="t">Aplicaciones</span></a>
+            </nav>
           </div>
         </div>
 
         <figure class="hero-wave" aria-label="La señal de la fuente, de la red a la salida regulada">
           <svg id="hero-svg" viewBox="0 0 1200 190" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
           <ol class="hero-stages">
-            <li><i style="background:var(--ac)"></i><b>Red</b>120&nbsp;V · 60&nbsp;Hz</li>
-            <li><i style="background:var(--ac)"></i><b>Transformador</b>12&nbsp;V rms</li>
-            <li><i style="background:var(--rect)"></i><b>Rectificador</b>pulsos</li>
-            <li><i style="background:var(--filt)"></i><b>Filtro</b>casi continua</li>
-            <li><i style="background:var(--reg)"></i><b>Regulador</b>continua y fija</li>
+            <li style="--c:var(--ac)"><b>Red</b>120&nbsp;V · 60&nbsp;Hz</li>
+            <li style="--c:var(--ac)"><b>Transformador</b>12&nbsp;V rms</li>
+            <li style="--c:var(--rect)"><b>Rectificador</b>pulsos</li>
+            <li style="--c:var(--filt)"><b>Filtro</b>casi continua</li>
+            <li style="--c:var(--reg)"><b>Regulador</b>continua y fija</li>
           </ol>
         </figure>
-
-        <nav class="hero-index" aria-label="Contenido">
-          <a href="#teoria"><span class="n">01</span><span class="t">Teoría de funcionamiento</span><span class="d">Cinco etapas, de la red a la carga</span></a>
-          <a href="#importancia"><span class="n">02</span><span class="t">Importancia</span><span class="d">Por qué el voltaje tiene que ser fijo</span></a>
-          <a href="#aplicaciones"><span class="n">03</span><span class="t">Aplicaciones</span><span class="d">Dónde están y para qué sirven</span></a>
-        </nav>
       </div>
     </section>
 
     <!-- ================= 1. TEORÍA ================= -->
     <section class="section theory" id="teoria" aria-labelledby="t-title">
       <div class="wrap">
-        <header class="section-head" data-reveal>
-          <p class="eyebrow"><span>1</span>Teoría de funcionamiento</p>
-          <h2 id="t-title">Cinco bloques en cascada</h2>
-          <p>Cada bloque recibe la señal del anterior y la deja más cerca de lo que necesita la carga, baja despacio y mira cómo cambia en cada punto del circuito.</p>
+        <header class="section-head">
+          <p class="eyebrow" data-reveal><span>1</span>Teoría de funcionamiento</p>
+          <h2 id="t-title" data-split="words">Cinco bloques en cascada</h2>
+          <p data-reveal>Cada bloque recibe la señal del anterior y la deja más cerca de lo que necesita la carga, baja despacio y mira cómo cambia en cada punto del circuito.</p>
         </header>
+
+        <ul class="datos" aria-label="Datos del diseño">
+          <li class="dato" style="--c:var(--ac);--ct:var(--ac-t)" data-reveal><span class="v"><span data-count="120">120</span><small>V rms</small></span><span class="l">Red, 60&nbsp;Hz</span></li>
+          <li class="dato" style="--c:var(--rect);--ct:var(--rect-t)" data-reveal><span class="v"><span data-count="12">12</span><small>V rms</small></span><span class="l">Transformador</span></li>
+          <li class="dato" style="--c:var(--filt);--ct:var(--filt-t)" data-reveal><span class="v"><span data-count="0.33" data-dec="2">0.33</span><small>Vpp</small></span><span class="l">Rizo a 100&nbsp;mA</span></li>
+          <li class="dato" style="--c:var(--reg);--ct:var(--reg-t)" data-reveal><span class="v"><span data-count="15">15</span><small>V</small></span><span class="l">Salida ajustable hasta</span></li>
+        </ul>
 
         <div class="scrolly" id="scrolly">
           <div class="stage" id="stage" aria-hidden="true">
             <ol class="blocks" id="blocks">
-              <li><span class="chip" style="--c:var(--ac)"><b>1</b><span class="long">Voltaje AC</span><span class="short">AC</span></span></li>
-              <li><span class="chip" style="--c:var(--rect)"><b>2</b><span class="long">Circuito rectificador</span><span class="short">Rect.</span></span></li>
-              <li><span class="chip" style="--c:var(--filt)"><b>3</b><span class="long">Filtro con capacitor</span><span class="short">Filtro</span></span></li>
-              <li><span class="chip" style="--c:var(--reg)"><b>4</b><span class="long">Regulador de voltaje</span><span class="short">Reg.</span></span></li>
-              <li><span class="chip" style="--c:var(--load)"><b>5</b><span class="long">Carga</span><span class="short">Carga</span></span></li>
+              <li><span class="chip" style="--c:var(--ac);--cbg:var(--ac-bg)"><b>1</b><span class="long">Voltaje AC</span><span class="short">AC</span></span></li>
+              <li><span class="chip" style="--c:var(--rect);--cbg:var(--rect-bg)"><b>2</b><span class="long">Rectificador</span><span class="short">Rect.</span></span></li>
+              <li><span class="chip" style="--c:var(--filt);--cbg:var(--filt-bg)"><b>3</b><span class="long">Filtro con capacitor</span><span class="short">Filtro</span></span></li>
+              <li><span class="chip" style="--c:var(--reg);--cbg:var(--reg-bg)"><b>4</b><span class="long">Regulador de voltaje</span><span class="short">Reg.</span></span></li>
+              <li><span class="chip" style="--c:var(--load);--cbg:var(--load-bg)"><b>5</b><span class="long">Carga</span><span class="short">Carga</span></span></li>
             </ol>
 
             <div class="panel schematic-wrap">
               <svg class="schematic sch" id="schematic" viewBox="0 0 760 262"></svg>
             </div>
 
-            <div class="panel scope-wrap">
+            <div class="panel screen scope-wrap">
               <div class="scope-head">
                 <span class="probe" id="scope-point">Tomacorriente</span>
                 <span class="read" id="scope-read">120&nbsp;V rms · 60&nbsp;Hz</span>
@@ -114,7 +123,7 @@
 
           <div class="steps" id="steps">
             <article class="step" data-step="0">
-              <div class="step-card" style="--c:var(--ac)">
+              <div class="step-card" style="--c:var(--ac);--ct:var(--ac-t);--cbg:var(--ac-bg)">
                 <p class="step-tag">Bloque 1 · Voltaje AC</p>
                 <h3>La red</h3>
                 <p>El tomacorriente entrega <strong>120&nbsp;V rms a 60&nbsp;Hz</strong>, una senoidal que sube hasta unos 170&nbsp;V y baja hasta −170&nbsp;V sesenta veces por segundo, demasiado para un circuito electrónico.</p>
@@ -123,7 +132,7 @@
             </article>
 
             <article class="step" data-step="1">
-              <div class="step-card" style="--c:var(--ac)">
+              <div class="step-card" style="--c:var(--ac);--ct:var(--ac-t);--cbg:var(--ac-bg)">
                 <p class="step-tag">Bloque 1 · Voltaje AC</p>
                 <h3>El transformador</h3>
                 <p>Baja el voltaje a un valor cercano al que necesita el diseño, aquí de <strong>120&nbsp;V a 12&nbsp;V rms</strong>, y aísla el circuito de la red, porque sus devanados no están conectados entre sí.</p>
@@ -133,7 +142,7 @@
             </article>
 
             <article class="step" data-step="2">
-              <div class="step-card" style="--c:var(--rect)">
+              <div class="step-card" style="--c:var(--rect);--ct:var(--rect-t);--cbg:var(--rect-bg)">
                 <p class="step-tag">Bloque 2 · Circuito rectificador</p>
                 <h3>Los diodos</h3>
                 <p>Dejan pasar la corriente en un solo sentido, en el puente conducen dos a la vez y se turnan en cada semiciclo, así los dos semiciclos salen hacia arriba.</p>
@@ -143,7 +152,7 @@
             </article>
 
             <article class="step" data-step="3">
-              <div class="step-card" style="--c:var(--filt)">
+              <div class="step-card" style="--c:var(--filt);--ct:var(--filt-t);--cbg:var(--filt-bg)">
                 <p class="step-tag">Bloque 3 · Filtro con capacitor</p>
                 <h3>El capacitor</h3>
                 <p>Se carga cerca del pico en cada pulso y le entrega energía a la carga mientras llega el siguiente, la salida queda casi continua, con una pequeña ondulación llamada <strong>rizo</strong>.</p>
@@ -159,26 +168,26 @@
                     <output id="out-c" for="in-c">2525&nbsp;µF</output>
                     <input type="range" id="in-c" min="1000" max="4700" step="25" value="2525">
                   </div>
-                  <div class="lab-res"><span>Vr ≈ I / (2 · f · C)</span><output id="out-r">0.33 Vpp</output></div>
+                  <div class="lab-res"><span>Vr ≈ I / (2 · f · C)</span><output id="out-r">0.33&nbsp;Vpp</output></div>
                   <button class="lab-reset" type="button" id="lab-reset">Volver a los datos del diseño</button>
                 </div>
               </div>
             </article>
 
             <article class="step" data-step="4">
-              <div class="step-card" style="--c:var(--reg)">
+              <div class="step-card" style="--c:var(--reg);--ct:var(--reg-t);--cbg:var(--reg-bg)">
                 <p class="step-tag">Bloque 4 · Regulador de voltaje</p>
                 <h3>El LM317</h3>
                 <p>Recibe el voltaje filtrado, que todavía tiene rizo y cambia con la red y con la carga, y entrega uno <strong>constante</strong>.</p>
                 <p>Mantiene 1.25&nbsp;V fijos entre su salida y su terminal de ajuste, y con dos resistencias externas, R2 variable, se elige la salida:</p>
                 <div class="formula">V<sub>out</sub> = 1.25&nbsp;V · (1 + R2/R1) <span class="dim">+ I<sub>ADJ</sub> · R2</span><small>El último término es pequeño y en la práctica se desprecia.</small></div>
-                <p style="margin-top:14px">Para regular, la entrada tiene que quedar por encima de la salida en un margen mínimo, del orden de 2&nbsp;V a 3&nbsp;V, incluso en el punto más bajo del rizo, y esa diferencia se disipa como <strong>calor</strong> en el integrado.</p>
+                <p style="margin-top:var(--space-xs)">Para regular, la entrada tiene que quedar por encima de la salida en un margen mínimo, del orden de 2&nbsp;V a 3&nbsp;V, incluso en el punto más bajo del rizo, y esa diferencia se disipa como <strong>calor</strong> en el integrado.</p>
                 <ul class="facts"><li>R2/R1 = 7 → 1.25&nbsp;V · 8 = 10&nbsp;V</li><li>P ≈ (15.4&nbsp;V − 10&nbsp;V) · 100&nbsp;mA ≈ 0.54&nbsp;W</li></ul>
               </div>
             </article>
 
             <article class="step" data-step="5">
-              <div class="step-card" style="--c:var(--load)">
+              <div class="step-card" style="--c:var(--load);--ct:var(--load-t);--cbg:var(--load-bg)">
                 <p class="step-tag">Bloque 5 · Carga</p>
                 <h3>La carga</h3>
                 <p>Recibe un voltaje <strong>continuo y estable</strong>, que no depende de la red ni de la corriente que consume.</p>
@@ -194,29 +203,29 @@
     <!-- ================= 2. IMPORTANCIA ================= -->
     <section class="section" id="importancia" aria-labelledby="i-title">
       <div class="wrap">
-        <header class="section-head" data-reveal>
-          <p class="eyebrow"><span>2</span>Importancia</p>
-          <h2 id="i-title">Un voltaje que no se mueve</h2>
-          <p>Los circuitos electrónicos se diseñan para un voltaje de alimentación definido, y si ese voltaje cambia, cambia su comportamiento.</p>
+        <header class="section-head">
+          <p class="eyebrow" data-reveal><span>2</span>Importancia</p>
+          <h2 id="i-title" data-split="words">Un voltaje que no se mueve</h2>
+          <p data-reveal>Los circuitos electrónicos se diseñan para un voltaje de alimentación definido, y si ese voltaje cambia, cambia su comportamiento.</p>
         </header>
 
-        <figure class="panel compare" data-reveal style="margin:0">
-          <div class="compare-head">
-            <span class="legend" style="--c:var(--rect)"><i></i>Sin regular, salida del filtro</span>
-            <span class="legend" style="--c:var(--reg)"><i></i>Regulada, salida del LM317</span>
-            <span class="hint">El tiempo está comprimido para ver el rizo</span>
-          </div>
-          <div class="compare-body" id="compare-body">
-            <svg id="compare" role="img" aria-label="Comparación en el tiempo: la salida sin regular baja cuando cae la red y cuando la carga pide más corriente, y siempre tiene rizo. La salida regulada se mantiene fija en 10&nbsp;V."></svg>
-          </div>
-          <figcaption class="compare-foot">Sin regular, el voltaje sube y baja con la red, cae cuando la carga pide más corriente y arrastra el rizo del filtro, <strong>la regulación elimina esas variaciones</strong>.</figcaption>
-        </figure>
+        <div class="bento">
+          <figure class="panel screen b-compare" data-reveal style="margin:0">
+            <div class="compare-head">
+              <span class="ttl">Sin regular frente a regulada</span>
+              <span class="legend" style="--c:var(--tr-rect)"><i></i>Salida del filtro</span>
+              <span class="legend" style="--c:var(--tr-reg)"><i></i>Salida del LM317</span>
+            </div>
+            <div class="compare-body" id="compare-body">
+              <svg id="compare" role="img" aria-label="Comparación en el tiempo: la salida sin regular baja cuando cae la red y cuando la carga pide más corriente, y siempre tiene rizo. La salida regulada se mantiene fija en 10&nbsp;V."></svg>
+            </div>
+            <figcaption class="compare-foot">Sin regular, el voltaje sube y baja con la red, cae cuando la carga pide más corriente y arrastra el rizo del filtro, <strong>la regulación elimina esas variaciones</strong>. El tiempo está comprimido para que se vea el rizo.</figcaption>
+          </figure>
 
-        <div class="grid-3">
-          <article class="panel card effect" data-reveal>
+          <article class="panel card b-effect" data-reveal>
             <div class="viz">
               <svg viewBox="0 0 80 64" aria-hidden="true">
-                <path d="M8 24h10l12-10v36L18 40H8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M8 24h10l12-10v36L18 40H8z" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round"/>
                 <path class="hum-arc" d="M36 24a10 10 0 0 1 0 16"/>
                 <path class="hum-arc a2" d="M42 18a18 18 0 0 1 0 28"/>
                 <path class="hum-arc a3" d="M48 12a26 26 0 0 1 0 40"/>
@@ -225,121 +234,147 @@
             <h3>En un amplificador</h3>
             <p>El rizo se cuela en la señal y se oye como un zumbido.</p>
           </article>
-          <article class="panel card effect" data-reveal>
+          <article class="panel card b-effect" data-reveal>
             <div class="viz">
               <svg viewBox="0 0 96 64" class="bits" aria-hidden="true">
-                <rect x="10" y="12" width="76" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="2"/>
-                <path d="M22 12V5M36 12V5M50 12V5M64 12V5M78 12V5M22 59v-7M36 59v-7M50 59v-7M64 59v-7M78 59v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <rect x="10" y="12" width="76" height="40" rx="6" fill="none" stroke="currentColor" stroke-width="2.4"/>
+                <path d="M22 12V5M36 12V5M50 12V5M64 12V5M78 12V5M22 59v-7M36 59v-7M50 59v-7M64 59v-7M78 59v-7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
                 <text y="37" text-anchor="middle"><tspan x="22">1</tspan><tspan x="36">0</tspan><tspan x="50" class="bit-bad">1</tspan><tspan x="64">1</tspan><tspan x="78">0</tspan></text>
               </svg>
             </div>
             <h3>En circuitos digitales</h3>
             <p>Una caída de voltaje puede cambiar un bit o reiniciar el sistema.</p>
           </article>
-          <article class="panel card effect" data-reveal>
+          <article class="panel card b-effect" data-reveal>
             <div class="viz">
               <svg viewBox="0 0 80 64" aria-hidden="true">
-                <path d="M12 52a28 28 0 0 1 56 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <path d="M16 38l4 2M24 29l3 3M40 24v4M56 29l-3 3M64 38l-4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                <path class="needle" d="M40 52V27" stroke="#e9eef6" stroke-width="2.4" stroke-linecap="round"/>
-                <circle cx="40" cy="52" r="3.5" fill="#e9eef6"/>
+                <path d="M12 52a28 28 0 0 1 56 0" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+                <path d="M16 38l4 2M24 29l3 3M40 24v4M56 29l-3 3M64 38l-4 2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+                <path class="needle" d="M40 52V27" stroke="#1c2024" stroke-width="2.6" stroke-linecap="round"/>
+                <circle cx="40" cy="52" r="3.6" fill="#1c2024"/>
               </svg>
             </div>
             <h3>En instrumentos de medición</h3>
             <p>Si la referencia se mueve, las lecturas salen erróneas.</p>
           </article>
-        </div>
 
-        <div class="grid-2 versus">
-          <article class="panel card" data-reveal>
-            <span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="9" width="21" height="14" rx="2.5" fill="none" stroke="#c3ccda" stroke-width="2"/><path d="M25 13.5h3v5h-3" fill="none" stroke="#c3ccda" stroke-width="2" stroke-linejoin="round"/><rect x="7" y="12" width="6" height="8" rx="1" fill="#ffb547"/></svg></span>
+          <article class="panel card vs-card b-batt" style="--cbg:var(--rect-bg)" data-reveal>
+            <span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="9" width="21" height="14" rx="2.5" fill="none" stroke="#cc4e00" stroke-width="2"/><path d="M25 13.5h3v5h-3" fill="none" stroke="#cc4e00" stroke-width="2" stroke-linejoin="round"/><rect x="7" y="12" width="6" height="8" rx="1" fill="#f76b15"/></svg></span>
             <h3>La batería</h3>
             <p>Su gran ventaja es la portabilidad, pero hay situaciones en que resulta muy costosa.</p>
             <div class="tag-row"><span class="tag good">portátil</span><span class="tag bad">costosa en muchos usos</span></div>
           </article>
-          <article class="panel card" data-reveal>
-            <span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M12 4v6M20 4v6" stroke="#c3ccda" stroke-width="2" stroke-linecap="round"/><path d="M9 10h14v5a7 7 0 0 1-14 0z" fill="none" stroke="#c3ccda" stroke-width="2" stroke-linejoin="round"/><path d="M16 22v6" stroke="#74e39a" stroke-width="2.2" stroke-linecap="round"/></svg></span>
-            <h3>La fuente conectada a la red</h3>
+          <article class="panel card vs-card b-red" style="--cbg:var(--reg-bg)" data-reveal>
+            <span class="ico"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M12 4v6M20 4v6" stroke="#2a7e3b" stroke-width="2" stroke-linecap="round"/><path d="M9 10h14v5a7 7 0 0 1-14 0z" fill="none" stroke="#2a7e3b" stroke-width="2" stroke-linejoin="round"/><path d="M16 22v6" stroke="#46a758" stroke-width="2.4" stroke-linecap="round"/></svg></span>
+            <h3>La fuente de red</h3>
             <p>Toma la energía del tomacorriente y da un voltaje continuo más económico, estable y potente.</p>
             <div class="tag-row"><span class="tag good">económica</span><span class="tag good">estable</span><span class="tag good">potente</span></div>
           </article>
-        </div>
 
-        <article class="panel variable" data-reveal>
-          <div class="variable-text">
-            <h3>Y si además es variable…</h3>
-            <p>Con R2 como potenciómetro el voltaje se puede ajustar, de modo que un solo equipo alimenta circuitos que trabajan con voltajes distintos, en este diseño ajustable hasta 15&nbsp;V.</p>
-            <div class="vchips" id="vchips" role="group" aria-label="Elegir un voltaje de salida">
-              <button type="button" data-v="3.3">3.3&nbsp;V</button>
-              <button type="button" data-v="5">5&nbsp;V</button>
-              <button type="button" data-v="9">9&nbsp;V</button>
-              <button type="button" data-v="12">12&nbsp;V</button>
-              <button type="button" data-v="15">15&nbsp;V</button>
+          <article class="panel b-var" data-reveal>
+            <div class="variable-text">
+              <h3>Y si además es variable</h3>
+              <p>Con R2 como potenciómetro el voltaje se puede ajustar, de modo que un solo equipo alimenta circuitos que trabajan con voltajes distintos, en este diseño ajustable hasta 15&nbsp;V.</p>
+              <div class="vchips" id="vchips" role="group" aria-label="Elegir un voltaje de salida">
+                <button type="button" data-v="3.3">3.3&nbsp;V</button>
+                <button type="button" data-v="5">5&nbsp;V</button>
+                <button type="button" data-v="9">9&nbsp;V</button>
+                <button type="button" data-v="12">12&nbsp;V</button>
+                <button type="button" data-v="15">15&nbsp;V</button>
+              </div>
             </div>
-          </div>
-          <div class="variable-viz">
-            <svg class="bench" viewBox="0 0 440 210" aria-hidden="true">
-              <rect x="8" y="10" width="424" height="190" rx="16" fill="#142033" stroke="#2d3d5a" stroke-width="1.5"/>
-              <rect x="8" y="10" width="424" height="190" rx="16" fill="url(#benchShade)"/>
-              <defs>
-                <linearGradient id="benchShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".05"/><stop offset="1" stop-color="#000" stop-opacity=".25"/></linearGradient>
-              </defs>
-              <text class="lab-t" x="32" y="40">FUENTE DC VARIABLE · LM317</text>
-              <rect x="32" y="54" width="200" height="92" rx="9" fill="#061009" stroke="#1d3b29" stroke-width="1.5"/>
-              <text class="lcd" id="bench-v" x="190" y="112" text-anchor="end" font-size="44">10.00</text>
-              <text class="lcd" x="198" y="112" font-size="20">V</text>
-              <text class="lcd-s" id="bench-r" x="46" y="134" font-size="12">R2/R1 = 7.00</text>
-              <g transform="translate(300 100)">
-                <g id="bench-ticks" stroke="#5b6880" stroke-width="2" stroke-linecap="round"></g>
-                <circle r="34" fill="#0d131d" stroke="#2d3d5a" stroke-width="1.5"/>
-                <g id="bench-knob">
-                  <circle r="27" fill="#1a2538" stroke="#34466a" stroke-width="1.2"/>
-                  <path d="M0 -24V-11" stroke="#e9eef6" stroke-width="3" stroke-linecap="round"/>
+            <div class="variable-viz">
+              <svg class="bench" viewBox="0 0 440 210" aria-hidden="true">
+                <defs><linearGradient id="benchShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#000" stop-opacity=".25"/></linearGradient></defs>
+                <rect x="8" y="10" width="424" height="190" rx="16" fill="#212225" stroke="#363a3f" stroke-width="1.5"/>
+                <rect x="8" y="10" width="424" height="190" rx="16" fill="url(#benchShade)"/>
+                <text class="lab-t" x="32" y="40">FUENTE DC VARIABLE · LM317</text>
+                <rect x="32" y="54" width="200" height="92" rx="9" fill="#08130b" stroke="#1d3b29" stroke-width="1.5"/>
+                <text class="lcd" id="bench-v" x="190" y="112" text-anchor="end" font-size="44">5.00</text>
+                <text class="lcd" x="198" y="112" font-size="20">V</text>
+                <text class="lcd-s" id="bench-r" x="46" y="134" font-size="12">R2/R1 = 3.00</text>
+                <g transform="translate(300 100)">
+                  <g id="bench-ticks" stroke="#8b8d98" stroke-width="2" stroke-linecap="round"></g>
+                  <circle r="34" fill="#18191b" stroke="#363a3f" stroke-width="1.5"/>
+                  <g id="bench-knob">
+                    <circle r="27" fill="#2b2d31" stroke="#43484e" stroke-width="1.2"/>
+                    <path d="M0 -24V-11" stroke="#edeef0" stroke-width="3" stroke-linecap="round"/>
+                  </g>
                 </g>
-              </g>
-              <text class="lab-t" x="300" y="164" text-anchor="middle">AJUSTE · R2</text>
-              <circle cx="390" cy="76" r="11" fill="#2a0f12" stroke="#ff5a5a" stroke-width="3"/>
-              <circle cx="390" cy="126" r="11" fill="#0d131d" stroke="#8d9ab0" stroke-width="3"/>
-              <text class="lab-t" x="390" y="104" text-anchor="middle" font-size="12">+</text>
-              <text class="lab-t" x="390" y="156" text-anchor="middle" font-size="12">−</text>
-            </svg>
-            <p class="bench-caption" id="bench-caption" aria-live="polite"><strong>10&nbsp;V</strong></p>
-          </div>
-        </article>
+                <text class="lab-t" x="300" y="164" text-anchor="middle">AJUSTE · R2</text>
+                <circle cx="390" cy="76" r="11" fill="#3b1219" stroke="#ff6369" stroke-width="3"/>
+                <circle cx="390" cy="126" r="11" fill="#18191b" stroke="#b0b4ba" stroke-width="3"/>
+                <text class="lab-t" x="390" y="104" text-anchor="middle" font-size="12">+</text>
+                <text class="lab-t" x="390" y="156" text-anchor="middle" font-size="12">−</text>
+              </svg>
+              <p class="bench-caption" id="bench-caption" aria-live="polite"><strong>5&nbsp;V</strong></p>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
 
     <!-- ================= 3. APLICACIONES ================= -->
-    <section class="section" id="aplicaciones" aria-labelledby="a-title">
+    <section class="section apps-section" id="aplicaciones" aria-labelledby="a-title">
       <div class="wrap">
-        <header class="section-head" data-reveal>
-          <p class="eyebrow"><span>3</span>Aplicaciones</p>
-          <h2 id="a-title">Del cargador al banco del laboratorio</h2>
+        <header class="section-head">
+          <p class="eyebrow" data-reveal><span>3</span>Aplicaciones</p>
+          <h2 id="a-title" data-split="words">Del cargador al laboratorio</h2>
+          <p data-reveal>Primero las fuentes que van dentro de los equipos, después las que se usan en el banco de trabajo.</p>
         </header>
-
-        <div class="apps">
-          <article class="panel" style="--c:var(--filt)" data-reveal>
-            <h3><span class="pill">en los equipos</span>Fuentes reguladas</h3>
+      </div>
+      <div class="apps-pin" id="apps-pin">
+        <div class="apps-track" id="apps-track">
+          <article class="app-intro" style="--c:var(--filt-t)">
+            <span class="pill">Dentro de los equipos</span>
+            <h3>Fuentes reguladas</h3>
             <p>Están dentro de la mayoría de los equipos que se conectan a la red, convierten la AC del tomacorriente en el voltaje continuo que necesitan sus circuitos.</p>
-            <ul class="tiles">
-              <li class="tile"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="8" width="38" height="25" rx="2.5"/><path d="M18 41h12M24 33v8"/></svg>Computadores</li>
-              <li class="tile"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="12" y="5" width="24" height="38" rx="3"/><circle cx="24" cy="29" r="7"/><circle cx="24" cy="14" r="3"/></svg>Equipos de audio</li>
-              <li class="tile"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="4" y="13" width="40" height="25" rx="2.5"/><path d="M17 5l7 8 7-8M15 43h18"/></svg>Televisores</li>
-              <li class="tile"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M18 4v8M30 4v8M13 12h22v7a11 11 0 0 1-22 0z"/><path d="M24 30v5a7 7 0 0 0 7 7h7"/></svg>Cargadores</li>
-              <li class="tile"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="11" y="4" width="26" height="40" rx="3.5"/><rect x="15" y="8" width="18" height="10" rx="1.5"/><circle cx="24" cy="30" r="6.5"/><path d="M24 30l3.5-4"/></svg>Instrumentos de medición</li>
-            </ul>
+          </article>
+          <article class="app-card" style="--cbg:var(--filt-bg);--ct:var(--filt-t)">
+            <span class="ico"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="8" width="38" height="25" rx="2.5"/><path d="M18 41h12M24 33v8"/></svg></span>
+            <div><span class="num">01</span><h4>Computadores</h4><p>Su fuente convierte la AC en los voltajes continuos de la placa, como 12&nbsp;V, 5&nbsp;V y 3.3&nbsp;V.</p></div>
+          </article>
+          <article class="app-card" style="--cbg:var(--filt-bg);--ct:var(--filt-t)">
+            <span class="ico"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="12" y="5" width="24" height="38" rx="3"/><circle cx="24" cy="29" r="7"/><circle cx="24" cy="14" r="3"/></svg></span>
+            <div><span class="num">02</span><h4>Equipos de audio</h4><p>Un voltaje limpio evita que el rizo se oiga como zumbido en los parlantes.</p></div>
+          </article>
+          <article class="app-card" style="--cbg:var(--filt-bg);--ct:var(--filt-t)">
+            <span class="ico"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="4" y="13" width="40" height="25" rx="2.5"/><path d="M17 5l7 8 7-8M15 43h18"/></svg></span>
+            <div><span class="num">03</span><h4>Televisores</h4><p>Alimentan la pantalla y los circuitos de control con voltajes estables.</p></div>
+          </article>
+          <article class="app-card" style="--cbg:var(--filt-bg);--ct:var(--filt-t)">
+            <span class="ico"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M18 4v8M30 4v8M13 12h22v7a11 11 0 0 1-22 0z"/><path d="M24 30v5a7 7 0 0 0 7 7h7"/></svg></span>
+            <div><span class="num">04</span><h4>Cargadores</h4><p>Entregan un voltaje fijo, como los 5&nbsp;V del USB, aunque la red varíe.</p></div>
+          </article>
+          <article class="app-card" style="--cbg:var(--filt-bg);--ct:var(--filt-t)">
+            <span class="ico"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="11" y="4" width="26" height="40" rx="3.5"/><rect x="15" y="8" width="18" height="10" rx="1.5"/><circle cx="24" cy="30" r="6.5"/><path d="M24 30l3.5-4"/></svg></span>
+            <div><span class="num">05</span><h4>Instrumentos de medición</h4><p>Una alimentación estable es la base de una lectura confiable.</p></div>
           </article>
 
-          <article class="panel" style="--c:var(--reg)" data-reveal>
-            <h3><span class="pill">en el laboratorio</span>Fuentes variables</h3>
+          <article class="app-intro" style="--c:var(--reg-t)">
+            <span class="pill">En el laboratorio</span>
+            <h3>Fuentes variables</h3>
             <p>Son una herramienta básica del laboratorio de electrónica, porque un mismo equipo entrega el voltaje que pida cada prueba.</p>
-            <ul class="tiles">
-              <li class="tile"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="4" y="12" width="40" height="24" rx="2.5"/><path d="M10 19h0M16 19h0M22 19h0M28 19h0M34 19h0M40 19h0M10 29h0M16 29h0M22 29h0M28 29h0M34 29h0M40 29h0" stroke-width="3"/></svg>Probar prototipos</li>
-              <li class="tile"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="14" y="14" width="20" height="20" rx="2.5"/><path d="M19 14V8M24 14V8M29 14V8M19 40v-6M24 40v-6M29 40v-6M14 19H8M14 24H8M14 29H8M40 19h-6M40 24h-6M40 29h-6"/></svg>Alimentar circuitos en desarrollo</li>
-              <li class="tile"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M3 24h8l3-6 4 12 4-12 4 12 4-12 4 12 3-6h8"/></svg>Verificar componentes a distintos voltajes</li>
-              <li class="tile"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M31 6a10 10 0 0 0-9.5 13.2L7.5 33.2a4.2 4.2 0 0 0 6 6l14-14A10 10 0 0 0 42 16.5l-6.2 6.2-6.3-2.2-2.2-6.3z"/></svg>Mantenimiento</li>
-              <li class="tile"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="14" width="33" height="20" rx="3"/><path d="M38 20h4v8h-4M23 17l-5 8h7l-4 7"/></svg>Cargar baterías</li>
-            </ul>
+          </article>
+          <article class="app-card" style="--cbg:var(--reg-bg);--ct:var(--reg-t)">
+            <span class="ico"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="4" y="12" width="40" height="24" rx="2.5"/><path d="M10 19h0M16 19h0M22 19h0M28 19h0M34 19h0M40 19h0M10 29h0M16 29h0M22 29h0M28 29h0M34 29h0M40 29h0" stroke-width="3"/></svg></span>
+            <div><span class="num">06</span><h4>Probar prototipos</h4><p>Se alimenta el montaje con el voltaje exacto que pide el diseño.</p></div>
+          </article>
+          <article class="app-card" style="--cbg:var(--reg-bg);--ct:var(--reg-t)">
+            <span class="ico"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="14" y="14" width="20" height="20" rx="2.5"/><path d="M19 14V8M24 14V8M29 14V8M19 40v-6M24 40v-6M29 40v-6M14 19H8M14 24H8M14 29H8M40 19h-6M40 24h-6M40 29h-6"/></svg></span>
+            <div><span class="num">07</span><h4>Circuitos en desarrollo</h4><p>Se sube el voltaje poco a poco mientras se revisa que todo funcione.</p></div>
+          </article>
+          <article class="app-card" style="--cbg:var(--reg-bg);--ct:var(--reg-t)">
+            <span class="ico"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M3 24h8l3-6 4 12 4-12 4 12 4-12 4 12 3-6h8"/></svg></span>
+            <div><span class="num">08</span><h4>Verificar componentes</h4><p>Se prueba cómo responde un componente a distintos voltajes.</p></div>
+          </article>
+          <article class="app-card" style="--cbg:var(--reg-bg);--ct:var(--reg-t)">
+            <span class="ico"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M31 6a10 10 0 0 0-9.5 13.2L7.5 33.2a4.2 4.2 0 0 0 6 6l14-14A10 10 0 0 0 42 16.5l-6.2 6.2-6.3-2.2-2.2-6.3z"/></svg></span>
+            <div><span class="num">09</span><h4>Mantenimiento</h4><p>Reemplaza la fuente de un equipo para revisarlo y encontrar la falla.</p></div>
+          </article>
+          <article class="app-card" style="--cbg:var(--reg-bg);--ct:var(--reg-t)">
+            <span class="ico"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="14" width="33" height="20" rx="3"/><path d="M38 20h4v8h-4M23 17l-5 8h7l-4 7"/></svg></span>
+            <div><span class="num">10</span><h4>Cargar baterías</h4><p>Ajustada al voltaje correcto, sirve para cargar baterías de distintos tipos.</p></div>
           </article>
         </div>
       </div>
@@ -349,13 +384,13 @@
   <!-- ================= REFERENCIAS ================= -->
   <footer class="refs" id="referencias">
     <div class="wrap">
-      <h2>Referencias</h2>
+      <h2 data-split="words">Referencias</h2>
       <ol>
         <li>López, E., Marrón, M. &amp; Bravo, I. (2008). <em>Fundamentos de electrónica</em> (2a.ed.). (pp. 14-52).</li>
         <li>Boylestad, R. Nashelsky, L. (2013). <em>Electrónica: Teoría de circuitos y dispositivos electrónicos</em>. (pp. 783-810).</li>
       </ol>
       <div class="credit">
-        <p>Trabajo realizado por <strong>Leonardo Sánchez</strong></p>
+        <p>Trabajo realizado por Leonardo Sánchez</p>
         <p>Electrónica Análoga (243006) · UNAD · Fase 6</p>
       </div>
     </div>
@@ -363,6 +398,8 @@
 
   <script src="vendor/gsap.min.js"></script>
   <script src="vendor/ScrollTrigger.min.js"></script>
+  <script src="vendor/SplitText.min.js"></script>
+  <script src="vendor/DrawSVGPlugin.min.js"></script>
   <script src="vendor/lenis.min.js"></script>
   <script src="js/main.js"></script>
 </body>

@@ -41,9 +41,15 @@
   const fmt = (v, d = 1) => v.toFixed(d);
   const minus = (s) => String(s).replace('-', '−');
 
+  // Trazas sobre la pantalla oscura del osciloscopio (Radix, paso 11 oscuro)
   const COL = {
-    ac: '#7fb0ff', rect: '#ffb547', filt: '#33d6c8', reg: '#74e39a', load: '#f4f6fb', heat: '#ff6b4a',
-    text: '#e9eef6', text2: '#c3ccda', muted: '#8d9ab0', dim: '#5b6880', base: '#c7d0de', bg: '#090d14', bg2: '#0d131d'
+    ac: '#70b8ff', rect: '#ffa057', filt: '#0bd8b6', reg: '#71d083', load: '#baa7ff', heat: '#ff977d',
+    text: '#edeef0', text2: '#edeef0', muted: '#b0b4ba', dim: '#5a6169', base: '#2b2e33', bg: '#18191b', bg2: '#111113'
+  };
+  // Colores sobre papel (Radix, paso 9 y 11 claro)
+  const PAP = {
+    ac: '#0090ff', rect: '#f76b15', filt: '#12a594', reg: '#46a758', load: '#6e56cf', heat: '#e54d2e',
+    regT: '#2a7e3b', filtT: '#008573', ink: '#1c2024', muted: '#63635e', base: '#2b2e33'
   };
   function rgb(h) { const n = parseInt(h.slice(1), 16); return [n >> 16 & 255, n >> 8 & 255, n & 255]; }
   function mix(a, b, t) {
@@ -109,13 +115,13 @@
     const W = 1200, Y0 = 112, seg = 240;
     const defs = el('defs', {}, svg);
     const grad = el('linearGradient', { id: 'hg', gradientUnits: 'userSpaceOnUse', x1: 0, y1: 0, x2: W, y2: 0 }, defs);
-    [[0, COL.ac], [0.395, COL.ac], [0.405, COL.rect], [0.595, COL.rect], [0.605, COL.filt], [0.795, COL.filt], [0.805, COL.reg], [1, COL.reg]]
+    [[0, PAP.ac], [0.395, PAP.ac], [0.405, PAP.rect], [0.595, PAP.rect], [0.605, PAP.filt], [0.795, PAP.filt], [0.805, PAP.reg], [1, PAP.reg]]
       .forEach(([o, c]) => el('stop', { offset: o, 'stop-color': c }, grad));
     const blur = el('filter', { id: 'hglow', x: '-10%', y: '-50%', width: '120%', height: '200%' }, defs);
     el('feGaussianBlur', { stdDeviation: 5 }, blur);
 
     const grid = el('g', { class: 'hw-grid' }, svg);
-    el('line', { x1: 0, x2: W, y1: Y0, y2: Y0 }, grid);
+    el('line', { class: 'hw-base', x1: 0, x2: W, y1: Y0, y2: Y0 }, grid);
     for (let i = 1; i < 5; i++) el('line', { class: 'hw-div', x1: i * seg, x2: i * seg, y1: 18, y2: 182 }, svg);
 
     const pts = [];
@@ -136,18 +142,18 @@
       pts.push([x, y]);
     }
     const d = 'M' + pts.map((p) => p[0] + ' ' + p[1].toFixed(2)).join('L');
-    const glow = el('path', { d, fill: 'none', stroke: 'url(#hg)', 'stroke-width': 7, opacity: 0.35, filter: 'url(#hglow)' }, svg);
-    const line = el('path', { d, fill: 'none', stroke: 'url(#hg)', 'stroke-width': 2.6, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
-    const dot = el('circle', { r: 5, fill: '#fff', opacity: 0 }, svg);
-    const halo = el('circle', { r: 13, fill: '#fff', opacity: 0 }, svg);
+    const glow = el('path', { d, fill: 'none', stroke: 'url(#hg)', 'stroke-width': 7, opacity: 0.22, filter: 'url(#hglow)' }, svg);
+    const line = el('path', { d, fill: 'none', stroke: 'url(#hg)', 'stroke-width': 3.2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
+    const dot = el('circle', { r: 5, fill: PAP.ink, opacity: 0 }, svg);
+    const halo = el('circle', { r: 13, fill: PAP.ink, opacity: 0 }, svg);
 
     if (REDUCE || !HAS_GSAP) return;
     const len = line.getTotalLength();
     [line, glow].forEach((p) => { p.style.strokeDasharray = len; p.style.strokeDashoffset = len; });
     G.to([line, glow], { strokeDashoffset: 0, duration: 2.2, ease: 'power2.inOut', delay: 0.25 });
-    const colorAt = (x) => x < 2 * seg ? COL.ac : x < 3 * seg ? COL.rect : x < 4 * seg ? COL.filt : COL.reg;
+    const colorAt = (x) => x < 2 * seg ? PAP.ac : x < 3 * seg ? PAP.rect : x < 4 * seg ? PAP.filt : PAP.reg;
     let p = 0, started = false, visible = true;
-    G.delayedCall(2.4, () => { started = true; G.to([dot], { opacity: 1, duration: 0.4 }); G.to(halo, { opacity: 0.18, duration: 0.4 }); });
+    G.delayedCall(2.4, () => { started = true; G.to([dot], { opacity: 1, duration: 0.4 }); G.to(halo, { opacity: 0.22, duration: 0.4 }); });
     if ('IntersectionObserver' in window) new IntersectionObserver((e) => { visible = e[0].isIntersecting; }).observe(svg);
     tickers.add((dt) => {
       if (!started || !visible) return;
@@ -185,7 +191,7 @@
     el('feGaussianBlur', { stdDeviation: 6 }, fb);
 
     const ORDER = ['src', 'trafo', 'rect', 'filt', 'reg', 'load'];
-    const GCOL = [COL.ac, COL.ac, COL.rect, COL.filt, COL.reg, COL.load];
+    const GCOL = [PAP.ac, PAP.ac, PAP.rect, PAP.filt, PAP.reg, PAP.load];
     const grp = {};
     ORDER.forEach((k, i) => { grp[k] = el('g', { class: 'g' }, sch); grp[k]._i = i; });
     const W_ = (g, d, cls) => el('path', { d, class: cls || 'w' }, g);
@@ -210,7 +216,7 @@
     W_(grp.trafo, coil(104, 90, 4, 14, 1));
     W_(grp.trafo, coil(154, 90, 4, 14, 0));
     el('path', { d: 'M126 94V198M132 94V198', class: 'w', 'stroke-width': 1.6 }, grp.trafo);
-    const flux = el('path', { d: 'M126 94V198M132 94V198', fill: 'none', stroke: COL.ac, 'stroke-width': 3, opacity: 0 }, grp.trafo);
+    const flux = el('path', { d: 'M126 94V198M132 94V198', fill: 'none', stroke: PAP.ac, 'stroke-width': 3, opacity: 0 }, grp.trafo);
     const acTop = W_(grp.trafo, 'M154 90H252', 'w acwire');
     const acBot = W_(grp.trafo, 'M154 202H170a6 6 0 0 1 12 0H252', 'w acwire');
     txt(grp.trafo, 129, 78, 'T', 'lbl', 'middle');
@@ -251,13 +257,13 @@
     jdot(grp.filt, 372, 56); jdot(grp.filt, 372, 236);
     txt(grp.filt, 352, 133, '+', 'lbl-s', 'middle');
     el('rect', { x: 398, y: 112, width: 9, height: 62, rx: 2.5, class: 'w', 'stroke-width': 1.4 }, grp.filt);
-    const gauge = el('rect', { x: 400.5, y: 114, width: 4, height: 58, rx: 1.2, fill: COL.filt }, grp.filt);
+    const gauge = el('rect', { x: 400.5, y: 114, width: 4, height: 58, rx: 1.2, fill: PAP.filt }, grp.filt);
     txt(grp.filt, 402.5, 104, 'C', 'lbl', 'middle');
     const capState = txt(grp.filt, 372, 256, '', 'lbl-s', 'middle');
-    const flowIn = el('path', { d: 'M330 56H420', class: 'flow', stroke: COL.filt, opacity: 0 }, grp.filt);
+    const flowIn = el('path', { d: 'M330 56H420', class: 'flow', stroke: PAP.filt, opacity: 0 }, grp.filt);
 
     // Regulador LM317
-    const heat = el('rect', { x: 412, y: 26, width: 106, height: 60, rx: 12, fill: COL.heat, opacity: 0, filter: 'url(#sblur)' }, grp.reg);
+    const heat = el('rect', { x: 412, y: 26, width: 106, height: 60, rx: 12, fill: PAP.heat, opacity: 0, filter: 'url(#sblur)' }, grp.reg);
     el('rect', { x: 420, y: 34, width: 90, height: 44, rx: 6, class: 'w', style: 'fill:#0d131d' }, grp.reg);
     txt(grp.reg, 465, 62, 'LM317', 'lbl-b', 'middle');
     txt(grp.reg, 426, 48, 'IN', 'lbl-s pin');
@@ -279,23 +285,23 @@
     txt(grp.reg, 578, 108, 'R1', 'lbl');
     txt(grp.reg, 584, 204, 'R2', 'lbl');
     const vref = el('g', { opacity: 0 }, grp.reg);
-    el('path', { d: 'M546 62h-5V144h5', fill: 'none', stroke: COL.reg, 'stroke-width': 1.4 }, vref);
-    txt(vref, 535, 108, '1.25 V', 'lbl-s', 'end', { style: 'fill:' + COL.reg });
+    el('path', { d: 'M546 62h-5V144h5', fill: 'none', stroke: PAP.regT, 'stroke-width': 1.4 }, vref);
+    txt(vref, 535, 108, '1.25 V', 'lbl-s', 'end', { style: 'fill:' + PAP.regT });
 
     // Carga
-    const rlGlow = el('rect', { x: 674, y: 92, width: 32, height: 104, rx: 10, fill: COL.load, opacity: 0, filter: 'url(#sblur)' }, grp.load);
+    const rlGlow = el('rect', { x: 674, y: 92, width: 32, height: 104, rx: 10, fill: PAP.load, opacity: 0, filter: 'url(#sblur)' }, grp.load);
     W_(grp.load, 'M560 56H690');
     W_(grp.load, zig(690, 56, 236, 40));
     W_(grp.load, 'M690 236H560');
     txt(grp.load, 708, 142, 'RL', 'lbl');
     txt(grp.load, 708, 160, '100 Ω', 'lbl-s');
-    const flowOut = el('path', { d: 'M510 56H690M690 236H372', class: 'flow', stroke: COL.reg, opacity: 0 }, grp.load);
+    const flowOut = el('path', { d: 'M510 56H690M690 236H372', class: 'flow', stroke: PAP.reg, opacity: 0 }, grp.load);
 
     // Punta del osciloscopio
     const probe = el('g', {}, sch);
     el('circle', { r: 7, class: 'probe-pulse' }, probe);
     const probeRing = el('circle', { r: 7, class: 'probe-ring' }, probe);
-    el('circle', { r: 2.6, fill: COL.text }, probe);
+    el('circle', { r: 2.6, fill: PAP.ink }, probe);
     const PROBE = [[70, 90], [206, 90], [330, 104], [350, 56], [535, 56], [690, 74]];
 
     // ---------------- Osciloscopio ----------------
@@ -457,7 +463,7 @@
       const b = [0, 0, 1, 2, 3, 4][i];
       chips.forEach((c, k) => { c.classList.toggle('is-active', k === b); c.classList.toggle('is-done', k < b); });
       pointEl.textContent = POINT[i];
-      pointEl.style.setProperty('--c', GCOL[i]);
+      pointEl.style.setProperty('--c', [COL.ac, COL.ac, COL.rect, COL.filt, COL.reg, COL.load][i]);
       readEl.textContent = readFor(i);
     }
 
@@ -597,7 +603,7 @@
         const vis = smooth(S - i + 1);
         setA(g, 'opacity', (0.13 + 0.87 * vis).toFixed(3));
         const a = clamp(1 - Math.abs(S - i) * 1.5);
-        g.style.color = a > 0.001 ? mix(COL.base, GCOL[i], a) : '';
+        g.style.color = a > 0.001 ? mix(PAP.base, GCOL[i], a) : '';
       });
       const sv = Math.sin(OMEGA * ts);
       const pos = sv > 0;
@@ -622,7 +628,7 @@
       setA(capState, 'opacity', cs.toFixed(3));
       const label = f.charging(ts) ? 'se carga' : 'se descarga';
       if (capState.textContent !== label) capState.textContent = label;
-      capState.style.fill = f.charging(ts) ? COL.filt : COL.muted;
+      capState.style.fill = f.charging(ts) ? PAP.filtT : PAP.muted;
       setA(flowIn, 'opacity', smooth((S - 2.7) / 0.3).toFixed(3));
 
       setA(heat, 'opacity', (0.5 * smooth((S - 3.55) / 0.4) * (1 - 0.6 * smooth((S - 4.5) / 0.4))).toFixed(3));
@@ -634,7 +640,7 @@
       const i = Math.min(4, Math.floor(S)), fr = ease(S - i);
       const px = lerp(PROBE[i][0], PROBE[i + 1][0], fr), py = lerp(PROBE[i][1], PROBE[i + 1][1], fr);
       setA(probe, 'transform', 'translate(' + px.toFixed(1) + ' ' + py.toFixed(1) + ')');
-      probeRing.style.stroke = colorAt(S);
+      { const pi = Math.min(4, Math.floor(S)); probeRing.style.stroke = mix(GCOL[pi], GCOL[pi + 1], ease(S - pi)); }
     }
 
     // ---- scroll → etapa ----
@@ -736,15 +742,15 @@
       const cr = el('rect', { x: L.pl, y: 0, width: 0, height: h }, cpth);
 
       [10, 12, 14, 16].forEach((v) => {
-        el('line', { x1: L.pl, x2: L.pl + L.pw, y1: Y(v), y2: Y(v), class: 'tick-l', stroke: '#172235' }, svg);
+        el('line', { x1: L.pl, x2: L.pl + L.pw, y1: Y(v), y2: Y(v), class: 'tick-l', stroke: '#2b2d31' }, svg);
         txt(svg, L.pl - 8, Y(v) + 4, v + ' V', '', 'end');
       });
 
       const ev = [[W1, narrow ? ['La red baja', 'un 10 %'] : ['La red baja un 10 %']], [W2, narrow ? ['La carga pide', 'más corriente'] : ['La carga pide más corriente']]];
       const evG = ev.map(([wv, lines]) => {
         const g = el('g', { opacity: 0 }, svg);
-        el('rect', { x: X(wv[0]), y: L.pt - 6, width: X(wv[1]) - X(wv[0]) + L.pw * 0.04, height: L.ph + 6, fill: '#ffffff', opacity: 0.035, rx: 6 }, g);
-        el('line', { x1: X(wv[0]), x2: X(wv[0]), y1: L.pt - 6, y2: L.pt + L.ph, stroke: '#2d3d5a', 'stroke-dasharray': '3 4' }, g);
+        el('rect', { x: X(wv[0]), y: L.pt - 6, width: X(wv[1]) - X(wv[0]) + L.pw * 0.04, height: L.ph + 6, fill: '#ffffff', opacity: 0.05, rx: 6 }, g);
+        el('line', { x1: X(wv[0]), x2: X(wv[0]), y1: L.pt - 6, y2: L.pt + L.ph, stroke: '#43484e', 'stroke-dasharray': '3 4' }, g);
         lines.forEach((s, i) => txt(g, X(wv[0]) + 6, L.pt - (lines.length - i) * 15 + 1, s, 'ann', 'start'));
         g._x = wv[0];
         return g;
@@ -825,7 +831,7 @@
     new IntersectionObserver((e) => {
       clearInterval(timer);
       if (e[0].isIntersecting && !user) timer = setInterval(() => select((idx + 1) % btns.length, false), 2600);
-    }, { threshold: 0.4 }).observe(knob.closest('.variable'));
+    }, { threshold: 0.4 }).observe(knob.closest('.b-var'));
   }
 
   // =====================================================================
@@ -865,25 +871,93 @@
 
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver((es) => es.forEach((e) => e.target.classList.toggle('in-view', e.isIntersecting)), { threshold: 0.3 });
-      $$('.effect').forEach((e) => io.observe(e));
+      $$('.b-effect').forEach((e) => io.observe(e));
     }
 
     if (!HAS_GSAP || REDUCE) { $$('[data-reveal]').forEach((e) => { e.style.opacity = 1; e.style.transform = 'none'; }); return; }
     $$('[data-reveal]').forEach((e) => {
       G.to(e, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: e, start: 'top 90%', once: true } });
     });
-    $$('.tiles').forEach((t) => {
-      const items = t.querySelectorAll('.tile');
-      G.set(items, { opacity: 0, y: 14 });
-      ST.create({ trigger: t, start: 'top 88%', once: true, onEnter: () => G.to(items, { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out', stagger: 0.07 }) });
+    G.from('[data-intro]', { y: 22, opacity: 0, duration: 0.9, ease: 'power3.out', stagger: 0.09, delay: 0.35 });
+
+    // Contadores de los datos del diseño
+    $$('[data-count]').forEach((e) => {
+      const to = +e.dataset.count, dec = +(e.dataset.dec || 0), o = { v: 0 };
+      e.textContent = (0).toFixed(dec);
+      ST.create({
+        trigger: e, start: 'top 90%', once: true,
+        onEnter: () => G.to(o, { v: to, duration: 1.6, ease: 'power3.out', onUpdate: () => { e.textContent = o.v.toFixed(dec); } })
+      });
+    });
+  }
+
+  // Títulos que entran letra por letra o palabra por palabra (GSAP SplitText)
+  function textFx() {
+    const heads = $$('[data-split]');
+    const show = () => heads.forEach((h) => { h.style.visibility = 'visible'; });
+    if (!HAS_GSAP || REDUCE || !window.SplitText) { show(); return; }
+    G.registerPlugin(window.SplitText);
+    $$('.step h3, .b-effect h3, .vs-card h3, .variable-text h3').forEach((h) => { h.dataset.split = 'words'; h.dataset.splitLate = '1'; });
+    const all = $$('[data-split]');
+    const go = () => all.forEach((h) => {
+      const chars = h.dataset.split === 'chars';
+      window.SplitText.create(h, {
+        type: chars ? 'lines,words,chars' : 'lines,words',
+        mask: 'lines',
+        linesClass: 'split-line',
+        autoSplit: true,
+        onSplit(self) {
+          h.style.visibility = 'visible';
+          if (chars) return G.from(self.chars, { yPercent: 115, duration: 1, ease: 'power4.out', stagger: 0.022, delay: 0.1 });
+          return G.from(self.words, {
+            yPercent: 115, duration: 0.9, ease: 'power4.out', stagger: 0.07,
+            scrollTrigger: { trigger: h, start: h.dataset.splitLate ? 'top 80%' : 'top 90%', once: true }
+          });
+        }
+      });
+    });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(go); else go();
+    setTimeout(show, 2500);
+  }
+
+  // El esquema se dibuja solo la primera vez que aparece (GSAP DrawSVG)
+  function drawFx() {
+    if (!HAS_GSAP || REDUCE || !window.DrawSVGPlugin) return;
+    G.registerPlugin(window.DrawSVGPlugin);
+    const paths = $$('#schematic .w');
+    if (!paths.length) return;
+    G.set(paths, { drawSVG: '0%' });
+    ST.create({
+      trigger: '#scrolly', start: 'top 85%', once: true,
+      onEnter: () => G.to(paths, {
+        drawSVG: '100%', duration: 1.1, ease: 'power2.inOut', stagger: 0.012,
+        onComplete: () => G.set(paths, { clearProps: 'strokeDasharray,strokeDashoffset' })
+      })
+    });
+  }
+
+  // Aplicaciones: recorrido horizontal ligado al scroll
+  function appsFx() {
+    const pin = $('#apps-pin'), track = $('#apps-track');
+    if (!pin || !track) return;
+    if (!HAS_GSAP || REDUCE) { doc.classList.add('apps-static'); return; }
+    G.matchMedia().add('(min-width: 960px)', () => {
+      const dist = () => Math.max(0, track.scrollWidth - window.innerWidth);
+      G.to(track, {
+        x: () => -dist(), ease: 'none',
+        scrollTrigger: { trigger: pin, start: 'center center', end: () => '+=' + dist(), pin: true, scrub: 0.6, invalidateOnRefresh: true, anticipatePin: 1 }
+      });
     });
   }
 
   function init() {
     hero();
     theory();
+    drawFx();
     compare();
     bench();
+    appsFx();
+    textFx();
     chrome();
     if (HAS_GSAP) {
       window.addEventListener('load', () => ST.refresh());
