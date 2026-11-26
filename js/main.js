@@ -765,7 +765,7 @@
       return Vp - Vr * s;
     }
     const R = [8.6, 16.6];
-    let L = {}, refs = {}, cp = REDUCE || !HAS_GSAP ? 1 : 0, target = cp;
+    let L = {}, refs = {}, cp = REDUCE || !HAS_GSAP ? 1 : 0;
 
     function build() {
       const w = Math.max(260, Math.round(body.clientWidth)), h = Math.max(200, Math.round(body.clientHeight));
@@ -825,10 +825,16 @@
     let rz;
     window.addEventListener('resize', () => { cancelAnimationFrame(rz); rz = requestAnimationFrame(build); });
     if (REDUCE || !HAS_GSAP) return;
-    ST.create({ trigger: body, start: 'top 80%', end: 'bottom 88%', onUpdate: (s) => { target = s.progress; } });
+    // Se dibuja en 6 s, se sostiene 3 s y vuelve a empezar, mientras la gráfica esté en pantalla.
+    const DRAW = 6, HOLD = 3, CYC = DRAW + HOLD;
+    let vis = false, tt = 0;
+    if ('IntersectionObserver' in window) new IntersectionObserver((e) => { vis = e[0].isIntersecting; }, { threshold: 0.35 }).observe(body);
     tickers.add((dt) => {
-      if (Math.abs(target - cp) < 0.0005) { if (cp !== target) { cp = target; render(); } return; }
-      cp += (target - cp) * (1 - Math.exp(-dt * 6));
+      if (!vis) return;
+      tt = (tt + dt) % CYC;
+      cp = Math.min(1, tt / DRAW);
+      const o = tt > CYC - 0.5 ? (CYC - tt) / 0.5 : tt < 0.25 ? tt / 0.25 : 1;
+      svg.style.opacity = o.toFixed(3);
       render();
     });
   }
@@ -837,41 +843,34 @@
   //  FUENTE VARIABLE · perilla y pantalla
   // =====================================================================
   function bench() {
-    const knob = $('#bench-knob'), vEl = $('#bench-v'), rEl = $('#bench-r'), cap = $('#bench-caption');
+    const knob = $('#bench-knob'), vEl = $('#bench-v'), rEl = $('#bench-r');
     const ticks = $('#bench-ticks');
-    const btns = $$('#vchips button');
-    if (!knob) return;
+    const items = $$('#vscale li');
+    if (!knob || !items.length) return;
     for (let i = 0; i <= 10; i++) {
       const a = (-135 + 27 * i) * Math.PI / 180;
       el('line', { x1: Math.sin(a) * 39, y1: -Math.cos(a) * 39, x2: Math.sin(a) * (i % 5 === 0 ? 45 : 43), y2: -Math.cos(a) * (i % 5 === 0 ? 45 : 43) }, ticks);
     }
-    const USE = { '3.3': 'microcontroladores', '5': 'lógica digital', '9': 'circuitos que usan batería de 9 V', '12': 'relés y motores pequeños', '15': 'amplificadores operacionales' };
     const st = { v: 5 };
     function paint() {
-      const v = st.v;
-      vEl.textContent = v.toFixed(2);
-      rEl.textContent = 'R2/R1 = ' + (v / 1.25 - 1).toFixed(2);
-      const ang = -135 + 270 * clamp((v - 1.25) / (15 - 1.25));
-      knob.setAttribute('transform', 'rotate(' + ang.toFixed(2) + ')');
+      vEl.textContent = st.v.toFixed(2);
+      rEl.textContent = 'R2/R1 = ' + (st.v / 1.25 - 1).toFixed(2);
+      knob.setAttribute('transform', 'rotate(' + (-135 + 270 * clamp((st.v - 1.25) / (15 - 1.25))).toFixed(2) + ')');
     }
-    let idx = 1, user = false, timer = null;
-    function select(i, fromUser) {
+    let idx = 1, timer = null;
+    function select(i) {
       idx = i;
-      const v = +btns[i].dataset.v;
-      btns.forEach((b, k) => b.setAttribute('aria-pressed', k === i ? 'true' : 'false'));
-      cap.innerHTML = '<strong>' + btns[i].textContent + '</strong> · ' + USE[btns[i].dataset.v];
-      if (HAS_GSAP && !REDUCE) G.to(st, { v, duration: 0.9, ease: 'power3.inOut', onUpdate: paint, overwrite: true });
+      items.forEach((li, k) => li.classList.toggle('is-on', k === i));
+      const v = +items[i].dataset.v;
+      if (HAS_GSAP && !REDUCE) G.to(st, { v, duration: 1.1, ease: 'power3.inOut', onUpdate: paint, overwrite: true });
       else { st.v = v; paint(); }
-      if (fromUser) { user = true; clearInterval(timer); }
     }
-    btns.forEach((b, i) => b.addEventListener('click', () => select(i, true)));
-    select(1, false);
-    st.v = 5; paint();
+    select(1);
     if (REDUCE || !('IntersectionObserver' in window)) return;
     new IntersectionObserver((e) => {
       clearInterval(timer);
-      if (e[0].isIntersecting && !user) timer = setInterval(() => select((idx + 1) % btns.length, false), 2600);
-    }, { threshold: 0.4 }).observe(knob.closest('.variable-block'));
+      if (e[0].isIntersecting) timer = setInterval(() => select((idx + 1) % items.length), 2400);
+    }, { threshold: 0.3 }).observe(knob.closest('.variable-block'));
   }
 
   // =====================================================================
@@ -912,7 +911,7 @@
 
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver((es) => es.forEach((e) => e.target.classList.toggle('in-view', e.isIntersecting)), { threshold: 0.3 });
-      $$('.effect').forEach((e) => io.observe(e));
+      $$('.effect, .vs-col').forEach((e) => io.observe(e));
     }
 
     if (!HAS_GSAP || REDUCE) { $$('[data-reveal]').forEach((e) => { e.style.opacity = 1; e.style.transform = 'none'; }); return; }
@@ -938,7 +937,7 @@
     const show = () => heads.forEach((h) => { h.style.visibility = 'visible'; });
     if (!HAS_GSAP || REDUCE || !window.SplitText) { show(); return; }
     G.registerPlugin(window.SplitText);
-    $$('.step h3, .effect h3, .vs-col h3, .variable-text h3').forEach((h) => { h.dataset.split = 'words'; h.dataset.splitLate = '1'; });
+    $$('.step h3, .effect h3, .blk-title').forEach((h) => { h.dataset.split = 'words'; h.dataset.splitLate = '1'; });
     const all = $$('[data-split]');
     const go = () => all.forEach((h) => {
       const chars = h.dataset.split === 'chars';
@@ -1002,7 +1001,7 @@
       const dist = () => Math.max(0, track.scrollWidth - window.innerWidth);
       G.to(track, {
         x: () => -dist(), ease: 'none',
-        scrollTrigger: { trigger: pin, start: 'center center', end: () => '+=' + dist(), pin: true, scrub: 0.6, invalidateOnRefresh: true, anticipatePin: 1 }
+        scrollTrigger: { trigger: '#aplicaciones', start: () => 'top top+=' + $('#topbar').offsetHeight, end: () => '+=' + dist(), pin: '#aplicaciones', scrub: 0.6, invalidateOnRefresh: true, anticipatePin: 1 }
       });
     });
   }

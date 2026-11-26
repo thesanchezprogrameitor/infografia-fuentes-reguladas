@@ -29,9 +29,9 @@
         <span>Fuentes reguladas</span>
       </a>
       <nav class="topnav" aria-label="Secciones">
-        <a href="#teoria" data-nav="teoria"><b>1</b><span>Teoría</span></a>
-        <a href="#importancia" data-nav="importancia"><b>2</b><span>Importancia</span></a>
-        <a href="#aplicaciones" data-nav="aplicaciones"><b>3</b><span>Aplicaciones</span></a>
+        <a href="#teoria" data-nav="teoria"><span>Teoría</span></a>
+        <a href="#importancia" data-nav="importancia"><span>Importancia</span></a>
+        <a href="#aplicaciones" data-nav="aplicaciones"><span>Aplicaciones</span></a>
       </nav>
     </div>
     <div class="progress" aria-hidden="true"><span id="progress"></span></div>
@@ -47,20 +47,20 @@
         </div>
 
         <div class="hero-main">
-          <div class="hero-title">
-            <h1 data-split="chars">Fuentes de alimentación <span class="accent">reguladas</span></h1>
-            <p class="lede" data-intro>Cómo el voltaje alterno del tomacorriente se vuelve, etapa por etapa, un voltaje continuo que no se mueve.</p>
-          </div>
-          <div class="credit-hero" data-intro>
-            <p class="who">Trabajo realizado por el estudiante</p>
-            <p class="author">Leonardo Sánchez</p>
-            <p class="activity">Problema de diseño fuente de alimentación regulada y variable</p>
+          <div class="hero-head">
+          <h1 data-split="chars"><span class="l1">Fuentes de alimentación</span> <span class="accent">reguladas</span></h1>
+          <p class="lede" data-intro>Cómo el voltaje alterno del tomacorriente se vuelve, etapa por etapa, un voltaje continuo que no se mueve.</p>
           </div>
         </div>
 
         <figure class="hero-diagram" aria-label="Diagrama de bloques de la fuente: red de 120 V a 60 Hz, transformador a 12 V rms, rectificador, filtro con capacitor, regulador y carga, con la forma de onda en cada punto.">
           <div class="hd-box" id="hero-box"><svg id="hero-svg" aria-hidden="true"></svg></div>
         </figure>
+
+        <div class="hero-credit" data-intro>
+          <p><span class="who">Trabajo realizado por el estudiante</span> <span class="author">Leonardo Sánchez</span></p>
+          <p class="activity">Problema de diseño fuente de alimentación regulada y variable</p>
+        </div>
       </div>
     </section>
 
@@ -69,8 +69,8 @@
       <div class="scrolly" id="scrolly">
         <div class="scene wrap" id="scene">
           <header class="scene-head">
-            <div class="sec-title"><span class="num" aria-hidden="true">01</span><h2 id="t-title" data-split="words">Teoría de funcionamiento</h2></div>
-            <p><strong>Cinco bloques en cascada.</strong> Cada uno recibe la señal del anterior y la deja más cerca de lo que necesita la carga.</p>
+            <h2 id="t-title" data-split="words">Teoría de funcionamiento</h2>
+            <p>Cinco bloques en cascada: cada uno deja la señal más cerca de lo que necesita la carga.</p>
           </header>
 
           <div class="stage" id="stage" aria-hidden="true">
@@ -181,8 +181,8 @@
     <section class="section" id="importancia" aria-labelledby="i-title">
       <div class="wrap">
         <header class="section-head">
-          <div class="sec-title"><span class="num" aria-hidden="true">02</span><h2 id="i-title" data-split="words">Importancia</h2></div>
-          <p data-reveal><strong>Un voltaje que no se mueve.</strong> Los circuitos electrónicos se diseñan para un voltaje de alimentación definido, y si ese voltaje cambia, cambia su comportamiento.</p>
+          <h2 id="i-title" data-split="words">Importancia</h2>
+          <p data-reveal>Los circuitos se diseñan para un voltaje fijo: si cambia, cambia su comportamiento.</p>
         </header>
 
         <div class="imp-a">
@@ -195,11 +195,11 @@
             <div class="compare-body" id="compare-body">
               <svg id="compare" role="img" aria-label="Comparación en el tiempo: la salida sin regular baja cuando cae la red y cuando la carga pide más corriente, y siempre tiene rizo. La salida regulada se mantiene fija en 10&nbsp;V."></svg>
             </div>
-            <figcaption class="compare-foot">Sin regular, el voltaje sube y baja con la red, cae cuando la carga pide más corriente y arrastra el rizo del filtro, <strong>la regulación elimina esas variaciones</strong>. El tiempo está comprimido para que se vea el rizo.</figcaption>
+            <figcaption class="compare-foot"><strong>La regulación elimina esas variaciones.</strong> Tiempo comprimido para que se vea el rizo.</figcaption>
           </figure>
 
           <div class="effects">
-            <p class="col-label">Si el voltaje de alimentación cambia</p>
+            <p class="col-label">Si el voltaje cambia</p>
             <article class="effect" data-reveal>
               <div class="viz">
                 <svg viewBox="0 0 80 64" aria-hidden="true">
@@ -237,38 +237,34 @@
 
         <div class="imp-b">
           <div class="versus" data-reveal>
-            <p class="col-label">Batería frente a fuente de red</p>
+            <h3 class="blk-title">Batería frente a fuente de red</h3>
             <div class="vs-grid">
               <div class="vs-col" style="--c:var(--rect);--ct:var(--rect-t)">
-                <svg class="vs-ico" viewBox="0 0 32 32" aria-hidden="true"><rect x="4" y="9" width="21" height="14" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M25 13.5h3v5h-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><rect x="7" y="12" width="6" height="8" rx="1" fill="currentColor"/></svg>
-                <h3>La batería</h3>
-                <p>Su gran ventaja es la portabilidad, pero hay situaciones en que resulta muy costosa.</p>
+                <svg class="vs-art batt" viewBox="0 0 160 96" aria-hidden="true">
+                  <rect x="8" y="18" width="128" height="60" rx="10" fill="none" stroke="currentColor" stroke-width="3"/>
+                  <path d="M136 36h10v24h-10" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+                  <rect class="batt-level" x="17" y="27" width="110" height="42" rx="5"/>
+                </svg>
+                <p class="vs-name">Batería</p>
                 <ul class="pros"><li class="good">Portátil</li><li class="bad">Costosa en muchos usos</li></ul>
               </div>
               <span class="vs-mark" aria-hidden="true">vs</span>
               <div class="vs-col" style="--c:var(--reg);--ct:var(--reg-t)">
-                <svg class="vs-ico" viewBox="0 0 32 32" aria-hidden="true"><path d="M12 4v6M20 4v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9 10h14v5a7 7 0 0 1-14 0z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M16 22v6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
-                <h3>La fuente de red</h3>
-                <p>Toma la energía del tomacorriente y da un voltaje continuo más económico, estable y potente.</p>
+                <svg class="vs-art plug" viewBox="0 0 160 96" aria-hidden="true">
+                  <path d="M38 10v16M58 10v16" stroke="currentColor" stroke-width="3.4" stroke-linecap="round"/>
+                  <path d="M28 26h40v14a20 20 0 0 1-40 0z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+                  <path d="M48 60v10q0 14 14 14h88" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                  <path class="plug-flow" d="M48 60v10q0 14 14 14h88" fill="none" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+                <p class="vs-name">Fuente de red</p>
                 <ul class="pros"><li class="good">Económica</li><li class="good">Estable</li><li class="good">Potente</li></ul>
               </div>
             </div>
           </div>
 
           <div class="variable-block" data-reveal>
-            <div class="variable-text">
-              <p class="col-label">Fuente variable</p>
-              <h3>Y si además es variable</h3>
-              <p>Con R2 como potenciómetro el voltaje se puede ajustar, de modo que un solo equipo alimenta circuitos que trabajan con voltajes distintos, en este diseño ajustable hasta 15&nbsp;V.</p>
-              <div class="vchips" id="vchips" role="group" aria-label="Elegir un voltaje de salida">
-                <button type="button" data-v="3.3">3.3&nbsp;V</button>
-                <button type="button" data-v="5">5&nbsp;V</button>
-                <button type="button" data-v="9">9&nbsp;V</button>
-                <button type="button" data-v="12">12&nbsp;V</button>
-                <button type="button" data-v="15">15&nbsp;V</button>
-              </div>
-              <p class="bench-caption" id="bench-caption" aria-live="polite"><strong>5&nbsp;V</strong></p>
-            </div>
+            <h3 class="blk-title">Y si además es variable</h3>
+            <p class="blk-sub">Con R2 como potenciómetro, un solo equipo entrega el voltaje que pida cada circuito, ajustable hasta 15&nbsp;V.</p>
             <div class="variable-viz">
               <svg class="bench" viewBox="0 0 440 210" aria-hidden="true">
                 <defs><linearGradient id="benchShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".06"/><stop offset="1" stop-color="#000" stop-opacity=".25"/></linearGradient></defs>
@@ -294,6 +290,13 @@
                 <text class="lab-t" x="390" y="156" text-anchor="middle" font-size="12">−</text>
               </svg>
             </div>
+            <ol class="vscale" id="vscale" aria-label="Algunos voltajes que entrega la fuente variable">
+              <li data-v="3.3"><b>3.3&nbsp;V</b><span>microcontroladores</span></li>
+              <li data-v="5"><b>5&nbsp;V</b><span>lógica digital</span></li>
+              <li data-v="9"><b>9&nbsp;V</b><span>circuitos de batería de 9&nbsp;V</span></li>
+              <li data-v="12"><b>12&nbsp;V</b><span>relés y motores pequeños</span></li>
+              <li data-v="15"><b>15&nbsp;V</b><span>amplificadores operacionales</span></li>
+            </ol>
           </div>
         </div>
       </div>
@@ -303,8 +306,8 @@
     <section class="section apps-section" id="aplicaciones" aria-labelledby="a-title">
       <div class="wrap">
         <header class="section-head">
-          <div class="sec-title"><span class="num" aria-hidden="true">03</span><h2 id="a-title" data-split="words">Aplicaciones</h2></div>
-          <p data-reveal><strong>Del cargador al laboratorio.</strong> Primero las fuentes que van dentro de los equipos, después las que se usan en el banco de trabajo.</p>
+          <h2 id="a-title" data-split="words">Aplicaciones</h2>
+          <p data-reveal>Del cargador del celular al banco del laboratorio.</p>
         </header>
       </div>
       <div class="apps-pin" id="apps-pin">
