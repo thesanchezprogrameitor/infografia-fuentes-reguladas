@@ -40,35 +40,23 @@
   <main>
     <!-- ================= PORTADA ================= -->
     <section class="hero" id="inicio">
-      <div class="wrap">
-        <div class="hero-meta" data-intro>
-          <span>UNAD · ECBTI · Ingeniería Electrónica</span>
-          <span>Electrónica Análoga · 243006</span>
-        </div>
-
-        <div class="hero-grid">
-          <div>
-            <p class="kicker" data-intro><i aria-hidden="true"><span style="background:var(--ac)"></span><span style="background:var(--rect)"></span><span style="background:var(--filt)"></span><span style="background:var(--reg)"></span></i>Infografía · Fase 6</p>
+      <div class="wrap hero-sheet">
+        <div class="hero-top">
+          <div class="hero-title">
+            <p class="kicker" data-intro><i aria-hidden="true"><span style="background:var(--ac)"></span><span style="background:var(--rect)"></span><span style="background:var(--filt)"></span><span style="background:var(--reg)"></span></i>Infografía interactiva</p>
             <h1 data-split="chars">Fuentes de alimentación <span class="accent">reguladas</span></h1>
-            <p class="lede" data-intro>Cómo los 120&nbsp;V alternos del tomacorriente se vuelven, etapa por etapa, un voltaje continuo que no se mueve.</p>
+            <p class="lede" data-intro>Cómo el voltaje alterno del tomacorriente se vuelve, etapa por etapa, un voltaje continuo que no se mueve.</p>
           </div>
-          <div class="hero-side">
-            <div class="author-card" data-intro>
-              <p class="who">Trabajo realizado por el estudiante</p>
-              <p class="author">Leonardo Sánchez</p>
-              <p class="course">Electrónica Análoga (243006) · Universidad Nacional Abierta y a Distancia, UNAD</p>
-              <p class="activity">Fase 6 · Problema de diseño fuente de alimentación regulada y variable</p>
-            </div>
-            <nav class="hero-index" aria-label="Contenido" data-intro>
-              <a href="#teoria"><span class="n">01</span><span class="t">Teoría de funcionamiento</span></a>
-              <a href="#importancia"><span class="n">02</span><span class="t">Importancia</span></a>
-              <a href="#aplicaciones"><span class="n">03</span><span class="t">Aplicaciones</span></a>
-            </nav>
-          </div>
+          <dl class="rotulo" data-intro>
+            <div class="r-author"><dt>Trabajo realizado por el estudiante</dt><dd>Leonardo Sánchez</dd></div>
+            <div><dt>Curso</dt><dd>Electrónica Análoga · 243006</dd></div>
+            <div><dt>Programa</dt><dd>Ingeniería Electrónica · ECBTI · Universidad Nacional Abierta y a Distancia, UNAD</dd></div>
+            <div><dt>Actividad</dt><dd>Fase 6 · Problema de diseño fuente de alimentación regulada y variable</dd></div>
+          </dl>
         </div>
 
         <figure class="hero-wave" aria-label="La señal de la fuente, de la red a la salida regulada">
-          <svg id="hero-svg" viewBox="0 0 1200 190" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+          <div class="hw-box" id="hero-box"><svg id="hero-svg" aria-hidden="true"></svg></div>
           <ol class="hero-stages">
             <li style="--c:var(--ac)"><b>Red</b>120&nbsp;V · 60&nbsp;Hz</li>
             <li style="--c:var(--ac)"><b>Transformador</b>12&nbsp;V rms</li>
@@ -81,22 +69,14 @@
     </section>
 
     <!-- ================= 1. TEORÍA ================= -->
-    <section class="section theory" id="teoria" aria-labelledby="t-title">
-      <div class="wrap">
-        <header class="section-head">
-          <p class="eyebrow" data-reveal><span>1</span>Teoría de funcionamiento</p>
-          <h2 id="t-title" data-split="words">Cinco bloques en cascada</h2>
-          <p data-reveal>Cada bloque recibe la señal del anterior y la deja más cerca de lo que necesita la carga, baja despacio y mira cómo cambia en cada punto del circuito.</p>
-        </header>
+    <section class="theory" id="teoria" aria-labelledby="t-title">
+      <div class="scrolly" id="scrolly">
+        <div class="scene wrap" id="scene">
+          <header class="scene-head">
+            <div class="sec-title"><span class="num" aria-hidden="true">01</span><h2 id="t-title" data-split="words">Teoría de funcionamiento</h2></div>
+            <p data-reveal><strong>Cinco bloques en cascada.</strong> Cada uno recibe la señal del anterior y la deja más cerca de lo que necesita la carga.</p>
+          </header>
 
-        <ul class="datos" aria-label="Datos del diseño">
-          <li class="dato" style="--c:var(--ac);--ct:var(--ac-t)" data-reveal><span class="v"><span data-count="120">120</span><small>V rms</small></span><span class="l">Red, 60&nbsp;Hz</span></li>
-          <li class="dato" style="--c:var(--rect);--ct:var(--rect-t)" data-reveal><span class="v"><span data-count="12">12</span><small>V rms</small></span><span class="l">Transformador</span></li>
-          <li class="dato" style="--c:var(--filt);--ct:var(--filt-t)" data-reveal><span class="v"><span data-count="0.33" data-dec="2">0.33</span><small>Vpp</small></span><span class="l">Rizo a 100&nbsp;mA</span></li>
-          <li class="dato" style="--c:var(--reg);--ct:var(--reg-t)" data-reveal><span class="v"><span data-count="15">15</span><small>V</small></span><span class="l">Salida ajustable hasta</span></li>
-        </ul>
-
-        <div class="scrolly" id="scrolly">
           <div class="stage" id="stage" aria-hidden="true">
             <ol class="blocks" id="blocks">
               <li><span class="chip" style="--c:var(--ac);--cbg:var(--ac-bg)"><b>1</b><span class="long">Voltaje AC</span><span class="short">AC</span></span></li>
@@ -106,7 +86,7 @@
               <li><span class="chip" style="--c:var(--load);--cbg:var(--load-bg)"><b>5</b><span class="long">Carga</span><span class="short">Carga</span></span></li>
             </ol>
 
-            <div class="panel schematic-wrap">
+            <div class="schematic-wrap">
               <svg class="schematic sch" id="schematic" viewBox="0 0 760 262"></svg>
             </div>
 
@@ -181,7 +161,7 @@
                 <p>Recibe el voltaje filtrado, que todavía tiene rizo y cambia con la red y con la carga, y entrega uno <strong>constante</strong>.</p>
                 <p>Mantiene 1.25&nbsp;V fijos entre su salida y su terminal de ajuste, y con dos resistencias externas, R2 variable, se elige la salida:</p>
                 <div class="formula">V<sub>out</sub> = 1.25&nbsp;V · (1 + R2/R1) <span class="dim">+ I<sub>ADJ</sub> · R2</span><small>El último término es pequeño y en la práctica se desprecia.</small></div>
-                <p style="margin-top:var(--space-xs)">Para regular, la entrada tiene que quedar por encima de la salida en un margen mínimo, del orden de 2&nbsp;V a 3&nbsp;V, incluso en el punto más bajo del rizo, y esa diferencia se disipa como <strong>calor</strong> en el integrado.</p>
+                <p>Para regular, la entrada tiene que quedar por encima de la salida un margen mínimo, del orden de 2&nbsp;V a 3&nbsp;V, incluso en el punto más bajo del rizo, y esa diferencia se disipa como <strong>calor</strong>.</p>
                 <ul class="facts"><li>R2/R1 = 7 → 1.25&nbsp;V · 8 = 10&nbsp;V</li><li>P ≈ (15.4&nbsp;V − 10&nbsp;V) · 100&nbsp;mA ≈ 0.54&nbsp;W</li></ul>
               </div>
             </article>
@@ -195,6 +175,7 @@
                 <ul class="facts"><li>10&nbsp;V sobre 100&nbsp;Ω → 100&nbsp;mA</li></ul>
               </div>
             </article>
+            <p class="step-count" id="step-count" aria-hidden="true"><b>1</b> / 6<span>Baja para seguir el circuito</span></p>
           </div>
         </div>
       </div>
@@ -204,9 +185,8 @@
     <section class="section" id="importancia" aria-labelledby="i-title">
       <div class="wrap">
         <header class="section-head">
-          <p class="eyebrow" data-reveal><span>2</span>Importancia</p>
-          <h2 id="i-title" data-split="words">Un voltaje que no se mueve</h2>
-          <p data-reveal>Los circuitos electrónicos se diseñan para un voltaje de alimentación definido, y si ese voltaje cambia, cambia su comportamiento.</p>
+          <div class="sec-title"><span class="num" aria-hidden="true">02</span><h2 id="i-title" data-split="words">Importancia</h2></div>
+          <p data-reveal><strong>Un voltaje que no se mueve.</strong> Los circuitos electrónicos se diseñan para un voltaje de alimentación definido, y si ese voltaje cambia, cambia su comportamiento.</p>
         </header>
 
         <div class="bento">
@@ -318,9 +298,8 @@
     <section class="section apps-section" id="aplicaciones" aria-labelledby="a-title">
       <div class="wrap">
         <header class="section-head">
-          <p class="eyebrow" data-reveal><span>3</span>Aplicaciones</p>
-          <h2 id="a-title" data-split="words">Del cargador al laboratorio</h2>
-          <p data-reveal>Primero las fuentes que van dentro de los equipos, después las que se usan en el banco de trabajo.</p>
+          <div class="sec-title"><span class="num" aria-hidden="true">03</span><h2 id="a-title" data-split="words">Aplicaciones</h2></div>
+          <p data-reveal><strong>Del cargador al laboratorio.</strong> Primero las fuentes que van dentro de los equipos, después las que se usan en el banco de trabajo.</p>
         </header>
       </div>
       <div class="apps-pin" id="apps-pin">
@@ -391,7 +370,6 @@
       </ol>
       <div class="credit">
         <p>Trabajo realizado por Leonardo Sánchez</p>
-        <p>Electrónica Análoga (243006) · UNAD · Fase 6</p>
       </div>
     </div>
   </footer>

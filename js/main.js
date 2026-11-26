@@ -107,63 +107,72 @@
   }
 
   // =====================================================================
-  //  HERO · una sola línea que resume la fuente
+  //  HERO · una sola línea que resume la fuente, a la medida de su caja
   // =====================================================================
   function hero() {
-    const svg = $('#hero-svg');
-    if (!svg) return;
-    const W = 1200, Y0 = 112, seg = 240;
-    const defs = el('defs', {}, svg);
-    const grad = el('linearGradient', { id: 'hg', gradientUnits: 'userSpaceOnUse', x1: 0, y1: 0, x2: W, y2: 0 }, defs);
-    [[0, PAP.ac], [0.395, PAP.ac], [0.405, PAP.rect], [0.595, PAP.rect], [0.605, PAP.filt], [0.795, PAP.filt], [0.805, PAP.reg], [1, PAP.reg]]
-      .forEach(([o, c]) => el('stop', { offset: o, 'stop-color': c }, grad));
-    const blur = el('filter', { id: 'hglow', x: '-10%', y: '-50%', width: '120%', height: '200%' }, defs);
-    el('feGaussianBlur', { stdDeviation: 5 }, blur);
+    const svg = $('#hero-svg'), box = $('#hero-box');
+    if (!svg || !box) return;
+    let pts = [], W = 0, seg = 0, line = null, glow = null, dot = null, halo = null, drawn = false;
 
-    const grid = el('g', { class: 'hw-grid' }, svg);
-    el('line', { class: 'hw-base', x1: 0, x2: W, y1: Y0, y2: Y0 }, grid);
-    for (let i = 1; i < 5; i++) el('line', { class: 'hw-div', x1: i * seg, x2: i * seg, y1: 18, y2: 182 }, svg);
+    function build() {
+      W = Math.max(280, Math.round(box.clientWidth));
+      const H = Math.max(90, Math.round(box.clientHeight));
+      seg = W / 5;
+      const Y0 = H * 0.54, A1 = H * 0.4, A2 = H * 0.2;
+      svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+      svg.textContent = '';
+      const defs = el('defs', {}, svg);
+      const grad = el('linearGradient', { id: 'hg', gradientUnits: 'userSpaceOnUse', x1: 0, y1: 0, x2: W, y2: 0 }, defs);
+      [[0, PAP.ac], [0.395, PAP.ac], [0.405, PAP.rect], [0.595, PAP.rect], [0.605, PAP.filt], [0.795, PAP.filt], [0.805, PAP.reg], [1, PAP.reg]]
+        .forEach(([o, c]) => el('stop', { offset: o, 'stop-color': c }, grad));
+      const blur = el('filter', { id: 'hglow', x: '-10%', y: '-50%', width: '120%', height: '200%' }, defs);
+      el('feGaussianBlur', { stdDeviation: 5 }, blur);
 
-    const pts = [];
-    let h = 0;
-    for (let x = 0; x <= W; x += 2) {
-      let y;
-      if (x < seg) y = Y0 - 70 * Math.sin(2 * Math.PI * 2 * x / seg);
-      else if (x < 2 * seg) y = Y0 - 24 * Math.sin(2 * Math.PI * 2 * (x - seg) / seg);
-      else if (x < 3 * seg) y = Y0 - 24 * Math.abs(Math.sin(2 * Math.PI * 2 * (x - 2 * seg) / seg));
-      else if (x < 4 * seg) {
-        const r = 24 * Math.abs(Math.sin(2 * Math.PI * 2 * (x - 3 * seg) / seg));
-        h = Math.max(r, h - 4.5 / 60 * 2);
-        y = Y0 - h;
-      } else {
-        const k = smooth((x - 4 * seg) / 22);
-        y = Y0 - lerp(h, 16, k);
+      el('line', { class: 'hw-base', x1: 0, x2: W, y1: Y0, y2: Y0 }, svg);
+      for (let i = 1; i < 5; i++) el('line', { class: 'hw-div', x1: i * seg, x2: i * seg, y1: 0, y2: H }, svg);
+
+      pts = [];
+      let h = 0;
+      const decay = (4.5 / 60) * (A2 / 24) * (240 / seg);
+      const sn = (x) => Math.sin(2 * Math.PI * 2 * x / seg);
+      for (let x = 0; x <= W; x += 2) {
+        let y;
+        if (x < seg) y = Y0 - A1 * sn(x);
+        else if (x < 2 * seg) y = Y0 - A2 * sn(x - seg);
+        else if (x < 3 * seg) y = Y0 - A2 * Math.abs(sn(x - 2 * seg));
+        else if (x < 4 * seg) { h = Math.max(A2 * Math.abs(sn(x - 3 * seg)), h - decay * 2); y = Y0 - h; }
+        else y = Y0 - lerp(h, A2 * 0.66, smooth((x - 4 * seg) / (22 * seg / 240)));
+        pts.push([x, y]);
       }
-      pts.push([x, y]);
+      const d = 'M' + pts.map((p) => p[0] + ' ' + p[1].toFixed(2)).join('L');
+      glow = el('path', { d, fill: 'none', stroke: 'url(#hg)', 'stroke-width': 7, opacity: 0.22, filter: 'url(#hglow)' }, svg);
+      line = el('path', { d, fill: 'none', stroke: 'url(#hg)', 'stroke-width': 3.2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
+      halo = el('circle', { r: 13, fill: PAP.ink, opacity: drawn ? 0.22 : 0 }, svg);
+      dot = el('circle', { r: 5, fill: PAP.ink, opacity: drawn ? 1 : 0 }, svg);
+      [dot, halo].forEach((c) => { c.setAttribute('cx', pts[0][0]); c.setAttribute('cy', pts[0][1].toFixed(1)); });
     }
-    const d = 'M' + pts.map((p) => p[0] + ' ' + p[1].toFixed(2)).join('L');
-    const glow = el('path', { d, fill: 'none', stroke: 'url(#hg)', 'stroke-width': 7, opacity: 0.22, filter: 'url(#hglow)' }, svg);
-    const line = el('path', { d, fill: 'none', stroke: 'url(#hg)', 'stroke-width': 3.2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
-    const dot = el('circle', { r: 5, fill: PAP.ink, opacity: 0 }, svg);
-    const halo = el('circle', { r: 13, fill: PAP.ink, opacity: 0 }, svg);
+    build();
+    let rz;
+    window.addEventListener('resize', () => { cancelAnimationFrame(rz); rz = requestAnimationFrame(build); });
 
     if (REDUCE || !HAS_GSAP) return;
     const len = line.getTotalLength();
     [line, glow].forEach((p) => { p.style.strokeDasharray = len; p.style.strokeDashoffset = len; });
-    G.to([line, glow], { strokeDashoffset: 0, duration: 2.2, ease: 'power2.inOut', delay: 0.25 });
+    G.to([line, glow], {
+      strokeDashoffset: 0, duration: 2.2, ease: 'power2.inOut', delay: 0.25,
+      onComplete: () => [line, glow].forEach((p) => { p.style.strokeDasharray = ''; p.style.strokeDashoffset = ''; })
+    });
     const colorAt = (x) => x < 2 * seg ? PAP.ac : x < 3 * seg ? PAP.rect : x < 4 * seg ? PAP.filt : PAP.reg;
-    let p = 0, started = false, visible = true;
-    G.delayedCall(2.4, () => { started = true; G.to([dot], { opacity: 1, duration: 0.4 }); G.to(halo, { opacity: 0.22, duration: 0.4 }); });
+    let p = 0, visible = true;
+    G.delayedCall(2.4, () => { drawn = true; G.to(dot, { opacity: 1, duration: 0.4 }); G.to(halo, { opacity: 0.22, duration: 0.4 }); });
     if ('IntersectionObserver' in window) new IntersectionObserver((e) => { visible = e[0].isIntersecting; }).observe(svg);
     tickers.add((dt) => {
-      if (!started || !visible) return;
+      if (!drawn || !visible || !pts.length) return;
       p = (p + dt / 7) % 1;
-      const i = Math.floor(p * (pts.length - 1));
-      const [x, y] = pts[i];
+      const [x, y] = pts[Math.floor(p * (pts.length - 1))];
       setA(dot, 'cx', x); setA(dot, 'cy', y.toFixed(1));
       setA(halo, 'cx', x); setA(halo, 'cy', y.toFixed(1));
-      const c = colorAt(x);
-      setA(halo, 'fill', c);
+      setA(halo, 'fill', colorAt(x));
     });
   }
 
@@ -175,6 +184,10 @@
     const scope = $('#scope');
     const scopeBody = $('#scope-body');
     const stage = $('#stage');
+    const scrolly = $('#scrolly');
+    const scene = $('#scene');
+    const topbar = $('#topbar');
+    const countEl = $('#step-count b');
     if (!sch || !scope) return;
     const steps = $$('#steps .step');
     const cards = steps.map((s) => s.querySelector('.step-card'));
@@ -462,6 +475,7 @@
       steps.forEach((s, k) => s.classList.toggle('is-active', k === i));
       const b = [0, 0, 1, 2, 3, 4][i];
       chips.forEach((c, k) => { c.classList.toggle('is-active', k === b); c.classList.toggle('is-done', k < b); });
+      if (countEl) countEl.textContent = i + 1;
       pointEl.textContent = POINT[i];
       pointEl.style.setProperty('--c', [COL.ac, COL.ac, COL.rect, COL.filt, COL.reg, COL.load][i]);
       readEl.textContent = readFor(i);
@@ -644,13 +658,21 @@
     }
 
     // ---- scroll → etapa ----
+    // Escritorio: la escena queda fija y el recorrido del scroll se reparte entre los 6 pasos.
+    // Cada paso se sostiene y luego pasa al siguiente; el último se queda quieto un tramo completo.
     function computeTarget() {
       const vh = window.innerHeight;
-      let line;
-      if (mqMobile.matches) {
-        const b = stage.getBoundingClientRect().bottom;
-        line = b + (vh - b) * 0.42;
-      } else line = vh * 0.5;
+      const N = steps.length;
+      if (!mqMobile.matches) {
+        const r = scrolly.getBoundingClientRect();
+        const tb = topbar ? topbar.offsetHeight : 0;
+        const u = clamp((tb - r.top) / Math.max(1, r.height - scene.offsetHeight)) * N;
+        const i = Math.min(N - 1, Math.floor(u));
+        if (i >= N - 1) return N - 1;
+        return i + smooth((u - i - 0.5) / 0.5);
+      }
+      const b = stage.getBoundingClientRect().bottom;
+      const line = b + (vh - b) * 0.42;
       const c = cards.map((cd) => { const r = cd.getBoundingClientRect(); return r.top + r.height / 2; });
       if (line <= c[0]) return 0;
       if (line >= c[c.length - 1]) return c.length - 1;
@@ -785,7 +807,7 @@
     let rz;
     window.addEventListener('resize', () => { cancelAnimationFrame(rz); rz = requestAnimationFrame(build); });
     if (REDUCE || !HAS_GSAP) return;
-    ST.create({ trigger: body, start: 'top 85%', end: 'bottom 40%', onUpdate: (s) => { target = s.progress; } });
+    ST.create({ trigger: body, start: 'top 80%', end: 'bottom 88%', onUpdate: (s) => { target = s.progress; } });
     tickers.add((dt) => {
       if (Math.abs(target - cp) < 0.0005) { if (cp !== target) { cp = target; render(); } return; }
       cp += (target - cp) * (1 - Math.exp(-dt * 6));
@@ -863,6 +885,7 @@
       const y = window.scrollY, max = document.documentElement.scrollHeight - window.innerHeight;
       bar.style.transform = 'scaleX(' + (max > 0 ? clamp(y / max) : 0).toFixed(4) + ')';
       top.classList.toggle('is-scrolled', y > 8);
+      top.classList.toggle('at-hero', y < window.innerHeight * 0.55);
       const mid = window.innerHeight * 0.4;
       let cur = -1;
       secs.forEach((s, i) => { const r = s.getBoundingClientRect(); if (r.top < mid && r.bottom > mid) cur = i; });
